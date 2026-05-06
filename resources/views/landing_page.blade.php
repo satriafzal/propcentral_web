@@ -1,1 +1,0 @@
-//buat landing page
