@@ -15,3 +15,11 @@ Route::get('/profile', function () {
 Route::get('/register', function () {
     return view('auth.register');
 });
+
+Route::get('/panduan', function () {
+    return view('panduan');
+});
+
+Route::get('/property', function () {
+    return view('property');
+});

@@ -14,11 +14,34 @@
 
     {{-- Tailwind CDN (sementara) --}}
     <script src="https://cdn.tailwindcss.com"></script>
+
+    {{-- Alpine JS --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            visibility: hidden;
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, visibility;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+            visibility: visible;
+        }
+    </style>
 </head>
-<body class="bg-[#f5f5f5] text-gray-800 font-[Poppins]">
+<body class="bg-[#f5f5f5] text-gray-800 font-[Poppins] scroll-smooth">
 
     {{-- Navbar --}}
     @include('component.navbar')
+
+    {{-- Search & Filter Bar --}}
+    @if(!isset($hideSearchFilter))
+        @include('component.search-filter-bar')
+    @endif
 
     {{-- Content --}}
     <main>
@@ -27,6 +50,9 @@
 
     {{-- Footer --}}
     @include('component.footer')
+
+    {{-- Contact Modal --}}
+    @include('component.contact-modal')
 
 </body>
 
@@ -50,6 +76,44 @@
         document.getElementById('registerModal')
             .classList.add('hidden');
     }
+
+    function openContact() {
+        document.getElementById('contactModal')
+            .classList.remove('hidden');
+    }
+
+    function closeContact() {
+        document.getElementById('contactModal')
+            .classList.add('hidden');
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        const hiddenElements = document.querySelectorAll('.fade-in-section');
+        hiddenElements.forEach((el) => observer.observe(el));
+
+        // Dynamically set search filter bar sticky position based on navbar height
+        const navbar = document.getElementById('mainNavbar');
+        const filterBar = document.getElementById('searchFilterBar');
+        if (navbar && filterBar) {
+            function updateFilterBarPosition() {
+                const navHeight = navbar.offsetHeight;
+                filterBar.style.top = navHeight + 'px';
+            }
+            updateFilterBarPosition();
+            window.addEventListener('resize', updateFilterBarPosition);
+        }
+    });
 </script>
 
 </html>
