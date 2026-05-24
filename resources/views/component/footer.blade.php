@@ -2,7 +2,7 @@
     <div class="grid grid-cols-4 gap-10">
 
         <div>
-            <h1 class="font-bold text-lg mb-2">Dwello</h1>
+            <h1 class="font-bold text-lg mb-2">PropCentral</h1>
             <p>Bringing you closer to your dream home.</p>
         </div>
 

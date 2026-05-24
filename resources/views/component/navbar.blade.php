@@ -2,7 +2,11 @@
 
 
 <nav class="flex justify-between items-center px-10 py-5 bg-white shadow">
-    <h1 class="font-bold text-xl">Dwello</h1>
+
+    <div class="flex items-center gap-2">
+    <img src="{{ asset('assets/images/logoprop.png') }}" class="w-10">
+    <h1 class="font-bold text-xl">PropCentral</h1>
+    </div>
 
     <ul class="flex gap-8">
         <li><a href="#">Home</a></li>
@@ -11,5 +15,5 @@
         <li><a href="#">Contact</a></li>
     </ul>
 
-    <button class="bg-brown-600 text-white px-4 py-2 rounded">Sign up</button>
+    <a href="{{ url('/register') }}" class="bg-brown-600 text-white px-4 py-2 rounded">Sign up</a>
 </nav>
