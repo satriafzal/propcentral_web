@@ -1,52 +1,50 @@
 <!-- Register Modal -->
 <div id="registerModal"
-    class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    class="hidden fixed inset-0 h-screen w-screen bg-black/50 flex items-center justify-center z-[100] backdrop-blur-sm">
 
-    <div class="bg-[#f4ede8] w-[500px] rounded-[60px] px-10 py-14 relative">
+    <div class="relative bg-[#F3EEE9] w-full max-w-md rounded-[30px] p-8 flex flex-col mx-4 shadow-2xl">
 
-        <!-- Close Button -->
         <button onclick="closeRegister()"
-            class="absolute top-6 right-8 text-3xl font-bold">
+            class="absolute top-5 right-6 text-3xl font-bold text-gray-500 hover:text-gray-800 transition">
             &times;
         </button>
 
-        <!-- Title -->
-        <h1 class="text-5xl font-bold text-center mb-14">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
             Register
         </h1>
 
-        <!-- Form -->
-        <form class="flex flex-col gap-8">
+        <form action="{{ route('register.post') }}" method="POST" class="flex flex-col gap-4">
+            @csrf
+            
+            <input type="text" name="username" placeholder="Username" required
+                class="bg-white rounded-full px-5 py-3 text-base outline-none w-full shadow-sm border border-gray-200 text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition">
 
-            <input type="text"
-                placeholder="Username"
-                class="bg-[#f8f8f8] rounded-full px-10 py-5 text-2xl outline-none">
+            <input type="email" name="email" placeholder="Email" required
+                class="bg-white rounded-full px-5 py-3 text-base outline-none w-full shadow-sm border border-gray-200 text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition">
 
-            <input type="email"
-                placeholder="Email"
-                class="bg-[#f8f8f8] rounded-full px-10 py-5 text-2xl outline-none">
+            <input type="password" id="regPassword" name="password" placeholder="Password" required
+                class="bg-white rounded-full px-5 py-3 text-base outline-none w-full shadow-sm border border-gray-200 text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition">
 
-            <input type="password"
-                placeholder="Password"
-                class="bg-[#f8f8f8] rounded-full px-10 py-5 text-2xl outline-none">
+            <p id="passwordWarning" class="text-xs text-red-500 px-5 mt-1 hidden">
+                Password harus minimal 6 karakter!
+            </p>
 
-            <!-- Button -->
-            <button
-                class="bg-[#f8f8f8] rounded-full py-5 text-4xl font-bold hover:bg-gray-200 transition">
+            <button type="submit" id="regSubmitBtn" disabled
+                class="bg-gray-400 text-white rounded-full py-3 mt-4 text-lg font-semibold shadow-md cursor-not-allowed transition-all duration-300">
                 Register
             </button>
-
         </form>
 
-        <!-- Login Link -->
-        <p class="text-center mt-16 text-xl">
-            Already have an account?
+        <div class="mt-8 text-center text-sm text-gray-600 border-t border-gray-300 pt-5">
+            <span>
+                Already have an account?
+            </span>
             <a href="#"
             onclick="closeRegister(); openLogin();"
-            class="text-blue-500 font-medium">
+            class="text-blue-600 font-semibold hover:underline ml-1">
                 Login
             </a>
-        </p>
+        </div>
 
     </div>
 
@@ -63,4 +61,34 @@
         document.getElementById('registerModal')
             .classList.add('hidden');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('regPassword');
+        const warningText = document.getElementById('passwordWarning');
+        const submitBtn = document.getElementById('regSubmitBtn');
+
+        passwordInput.addEventListener('input', function () {
+            const passwordLength = passwordInput.value.length;
+
+            if (passwordLength > 0 && passwordLength < 6) {
+                warningText.classList.remove('hidden');
+                
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
+                submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+            } else {
+                warningText.classList.add('hidden');
+                
+                if (passwordLength >= 6) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                    submitBtn.classList.add('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.remove('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
+                    submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                }
+            }
+        });
+    });
 </script>
