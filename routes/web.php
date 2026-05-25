@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -23,3 +24,8 @@ Route::get('/panduan', function () {
 Route::get('/property', function () {
     return view('property');
 });
+
+// routes for authentication
+Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
+Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
