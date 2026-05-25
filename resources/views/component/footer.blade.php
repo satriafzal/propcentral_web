@@ -34,4 +34,29 @@
         </div>
 
     </div>
+
+    {{-- for notification succes--}}
+    @if(session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top', 
+                    showConfirmButton: false,
+                    timer: 5000, 
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: '{{ session("success") }}' 
+                });
+            });
+        </script>
+    @endif
 </footer>
