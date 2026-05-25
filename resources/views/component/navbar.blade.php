@@ -1,3 +1,5 @@
+@include('auth.login')
+@include('auth.register')
 
 <nav id="mainNavbar" class="flex justify-between items-center px-10 py-5 bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-all duration-300">
 
