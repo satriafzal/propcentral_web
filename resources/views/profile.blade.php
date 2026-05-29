@@ -56,11 +56,14 @@
             </div>
 
             {{-- LOGOUT --}}
-            <a href="#"
-                class="flex items-center gap-3 p-3 text-red-500 font-semibold hover:bg-red-50 rounded-lg">
-                ↩
-                Logout
-            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="button" onclick="confirmLogout()" 
+                    class="w-full flex items-center gap-3 p-3 text-red-500 font-semibold hover:bg-red-50 rounded-lg text-left transition">
+                    ↩
+                    Logout
+                </button>
+            </form>
 
         </div>
 
@@ -87,10 +90,14 @@
             {{-- USER --}}
             <div class="flex items-center gap-4">
 
-                <div class="w-12 h-12 rounded-full bg-gray-300"></div>
+                <div class="w-12 h-12 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-xl overflow-hidden shadow-inner">
+                    {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                </div>
 
                 <div>
-                    <h3 class="font-bold">Adikta Hermawan</h3>
+                    <h3 class="font-bold">
+                            {{ Auth::user()->username }}
+                    </h3>
                     <p class="text-sm text-gray-500">Pembeli</p>
                 </div>
 
@@ -118,20 +125,21 @@
             <div class="bg-white rounded-2xl shadow p-8 flex justify-between items-start mb-8">
 
                 <div class="flex gap-6">
-
-                    <div class="w-28 h-28 rounded-full bg-gray-300"></div>
+                    <div class="w-28 h-28 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] text-5xl font-bold overflow-hidden shadow-inner">
+                        {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                    </div>
 
                     <div>
-                        <h2 class="text-3xl font-bold text-[#4b372d]">
-                            Adikta Hermawan
+                        <h2 class="text-3xl font-bold text-[#4b372d] capitalize">
+                            {{ Auth::user()->username }}
                         </h2>
 
-                        <span class="bg-[#ead9ca] text-[#7b5d4a] px-4 py-1 rounded-full text-sm inline-block mt-2">
+                        <span class="bg-[#ead9ca] text-[#7b5d4a] px-4 py-1 rounded-full text-sm font-semibold inline-block mt-2">
                             Pembeli
                         </span>
 
-                        <p class="mt-4 text-[#9d8876]">
-                            📅 Bergabung sejak Mei 2026
+                        <p class="mt-4 text-[#9d8876] font-medium">
+                            📅 Bergabung sejak {{ Auth::user()->created_at->format('F Y') }}
                         </p>
                     </div>
 
@@ -151,7 +159,9 @@
                 <div class="flex justify-between items-center mb-8">
 
                     <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-full bg-[#b68f70]"></div>
+                        <div class="w-14 h-14 rounded-full bg-[#b68f70] flex items-center justify-center text-white text-2xl font-bold shadow-inner">
+                            {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                        </div>
 
                         <h2 class="text-3xl font-bold text-[#4b372d]">
                             Informasi Pribadi
@@ -174,7 +184,9 @@
                             Nama Lengkap
                         </span>
 
-                        <span>Adikta Hermawan</span>
+                        <span>
+                            {{ Auth::user()->username }}
+                        </span>
                     </div>
 
                     <div class="grid grid-cols-2 border-b pb-4">
@@ -182,7 +194,9 @@
                             Email
                         </span>
 
-                        <span>adikta@gmail.com</span>
+                        <span>
+                            {{ Auth::user()->email }}
+                        </span>
                     </div>
 
                     <div class="grid grid-cols-2 items-center">
@@ -327,5 +341,27 @@
     </main>
 
 </div>
+
+{{-- for confirmation logout --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Ingin logout?',
+            text: "Jika logout, silahkan login ulang untuk akses kelola profile",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3d2b1f', 
+            cancelButtonColor: '#d33',     
+            confirmButtonText: 'Yes, Logout!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logout-form').submit();
+            }
+        });
+    }
+</script>
 
 @endsection
