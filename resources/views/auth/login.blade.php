@@ -12,6 +12,12 @@
             Login
         </h1>
 
+        @error('email')
+            <div class="bg-red-500 text-white p-3 rounded-xl mb-4 text-sm text-center shadow-md">
+                {{ $message }}
+            </div>
+        @enderror
+
         <form action="{{ route('login.post') }}" method="POST" class="flex flex-col">
             @csrf
             
@@ -19,7 +25,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-400">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0A17.933 17.933 0 0112 21.75a17.933 17.933 0 01-7.5-1.632z" />
                 </svg>
-                <input type="email" name="email" placeholder="Email" required class="bg-transparent outline-none text-base w-full text-gray-700 placeholder-gray-400">
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="Email" required class="bg-transparent outline-none text-base w-full text-gray-700 placeholder-gray-400">
             </div>
 
             <div class="bg-white rounded-full px-5 py-3 flex items-center gap-3 shadow-sm border border-gray-200">
@@ -35,31 +41,26 @@
         </form>
 
         <div class="mt-8 text-center text-sm text-gray-600 border-t border-gray-300 pt-5">
-
-            <span>
-                Don’t have an account?
-            </span>
-
-            <a href="#" 
-            onclick="closeLogin();openRegister();" 
-            class="text-blue-600 font-semibold hover:underline ml-1">
+            <span>Don’t have an account?</span>
+            <a href="#" onclick="closeLogin();openRegister();" class="text-blue-600 font-semibold hover:underline ml-1">
                 Register
             </a>
-
         </div>
-
     </div>
-
 </div>
 
 <script>
     function openLogin() {
-        document.getElementById('loginModal')
-            .classList.remove('hidden');
+        document.getElementById('loginModal').classList.remove('hidden');
     }
 
     function closeLogin() {
-        document.getElementById('loginModal')
-            .classList.add('hidden');
+        document.getElementById('loginModal').classList.add('hidden');
     }
+
+    @if($errors->has('email'))
+        document.addEventListener('DOMContentLoaded', function() {
+            openLogin();
+        });
+    @endif
 </script>
