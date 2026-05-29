@@ -12,12 +12,6 @@
             Login
         </h1>
 
-        @error('email')
-            <div class="bg-red-500 text-white p-3 rounded-xl mb-4 text-sm text-center shadow-md">
-                {{ $message }}
-            </div>
-        @enderror
-
         <form action="{{ route('login.post') }}" method="POST" class="flex flex-col">
             @csrf
             
