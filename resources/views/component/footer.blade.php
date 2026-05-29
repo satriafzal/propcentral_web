@@ -35,8 +35,8 @@
 
     </div>
 
-    {{-- for notification succes--}}
-    @if(session('success'))
+    {{-- for notification succes and error--}}
+    @if(session('success') || session('error') || $errors->any() )
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -52,10 +52,26 @@
                     }
                 });
 
-                Toast.fire({
-                    icon: 'success',
-                    title: '{{ session("success") }}' 
-                });
+                @if(session('success'))
+                    Toast.fire({
+                        icon: 'success',
+                        title: '{!! session("success") !!}' 
+                    });
+                @endif
+
+                @if(session('error'))
+                    Toast.fire({
+                        icon: 'error',
+                        title: '{!! session("error") !!}' 
+                    });
+                @endif
+
+                @if($errors->any())
+                    Toast.fire({
+                        icon: 'error',
+                        title: '{!! $errors->first() !!}' 
+                    });
+                @endif
             });
         </script>
     @endif
