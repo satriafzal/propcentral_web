@@ -21,8 +21,16 @@ Route::get('/panduan', function () {
     return view('panduan');
 });
 
+Route::get('/jual', function () {
+    return view('jual');
+});
+
 Route::get('/property', function () {
     return view('property');
+});
+
+Route::get('/saved', function () {
+    return view('saved');
 });
 
 // routes for authentication

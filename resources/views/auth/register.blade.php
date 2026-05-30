@@ -10,19 +10,19 @@
         </button>
 
         <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
-            Register
+            Daftar
         </h1>
 
         <form action="{{ route('register.post') }}" method="POST" class="flex flex-col gap-4">
             @csrf
             
-            <input type="text" name="username" placeholder="Username" required
+            <input type="text" name="username" placeholder="Nama Pengguna" required
                 class="bg-white rounded-full px-5 py-3 text-base outline-none w-full shadow-sm border border-gray-200 text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition">
 
             <input type="email" name="email" placeholder="Email" required
                 class="bg-white rounded-full px-5 py-3 text-base outline-none w-full shadow-sm border border-gray-200 text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition">
 
-            <input type="password" id="regPassword" name="password" placeholder="Password" required
+            <input type="password" id="regPassword" name="password" placeholder="Kata Sandi" required
                 class="bg-white rounded-full px-5 py-3 text-base outline-none w-full shadow-sm border border-gray-200 text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition">
 
             <p id="passwordWarning" class="text-xs text-red-500 px-5 mt-1 hidden">
@@ -31,18 +31,18 @@
 
             <button type="submit" id="regSubmitBtn" disabled
                 class="bg-gray-400 text-white rounded-full py-3 mt-4 text-lg font-semibold shadow-md cursor-not-allowed transition-all duration-300">
-                Register
+                Daftar
             </button>
         </form>
 
         <div class="mt-8 text-center text-sm text-gray-600 border-t border-gray-300 pt-5">
             <span>
-                Already have an account?
+                Sudah punya akun?
             </span>
             <a href="#"
             onclick="closeRegister(); openLogin();"
             class="text-blue-600 font-semibold hover:underline ml-1">
-                Login
+                Masuk
             </a>
         </div>
 

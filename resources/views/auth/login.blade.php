@@ -9,7 +9,7 @@
         </button>
 
         <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
-            Login
+            Masuk
         </h1>
 
         <form action="{{ route('login.post') }}" method="POST" class="flex flex-col">
@@ -26,18 +26,18 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-400">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 0h10.5A2.25 2.25 0 0119.5 12.75v6A2.25 2.25 0 0117.25 21h-10.5A2.25 2.25 0 014.5 18.75v-6A2.25 2.25 0 016.75 10.5z" />
                 </svg>
-                <input type="password" name="password" placeholder="Password" required class="bg-transparent outline-none text-base w-full text-gray-700 placeholder-gray-400">
+                <input type="password" name="password" placeholder="Kata Sandi" required class="bg-transparent outline-none text-base w-full text-gray-700 placeholder-gray-400">
             </div>
 
             <button type="submit" class="bg-gray-800 text-white rounded-full py-3 mt-8 text-lg font-semibold hover:bg-gray-700 transition shadow-md">
-                LOG IN
+                MASUK
             </button>
         </form>
 
         <div class="mt-8 text-center text-sm text-gray-600 border-t border-gray-300 pt-5">
-            <span>Don’t have an account?</span>
+            <span>Belum punya akun?</span>
             <a href="#" onclick="closeLogin();openRegister();" class="text-blue-600 font-semibold hover:underline ml-1">
-                Register
+                Daftar
             </a>
         </div>
     </div>
