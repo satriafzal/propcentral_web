@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->redirectGuestsTo(function (\Illuminate\Http\Request $request) {
+            session()->flash('error', 'Harap login untuk akses halaman lebih lanjut atau akses properti lainnya!');
+            return url('/');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
