@@ -154,68 +154,89 @@
 
 
             {{-- INFORMASI --}}
-            <div class="bg-white rounded-2xl shadow p-8 mb-8">
+            <div class="bg-white rounded-2xl shadow p-8 mb-8 relative">
+                
+                <form id="form-update-profile" action="{{ route('profile.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
-                <div class="flex justify-between items-center mb-8">
-
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-full bg-[#b68f70] flex items-center justify-center text-white text-2xl font-bold shadow-inner">
-                            {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                    <div class="flex justify-between items-center mb-8">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full bg-[#b68f70] flex items-center justify-center text-white text-2xl font-bold shadow-inner">
+                                {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                            </div>
+                            <h2 class="text-3xl font-bold text-[#4b372d]">
+                                Informasi Pribadi
+                            </h2>
                         </div>
 
-                        <h2 class="text-3xl font-bold text-[#4b372d]">
-                            Informasi Pribadi
-                        </h2>
-                    </div>
-
-                    <button
-                        class="border border-[#b79a85] px-5 py-2 rounded-lg">
-                        Edit Informasi ✏️
-                    </button>
-
-                </div>
-
-
-                {{-- TABLE --}}
-                <div class="space-y-6">
-
-                    <div class="grid grid-cols-2 border-b pb-4">
-                        <span class="font-semibold text-[#4b372d]">
-                            Nama Lengkap
-                        </span>
-
-                        <span>
-                            {{ Auth::user()->username }}
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 border-b pb-4">
-                        <span class="font-semibold text-[#4b372d]">
-                            Email
-                        </span>
-
-                        <span>
-                            {{ Auth::user()->email }}
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 items-center">
-                        <span class="font-semibold text-[#4b372d]">
-                            Password
-                        </span>
-
-                        <div class="flex justify-between items-center">
-                            <span>***********</span>
-
-                            <button
-                                class="border border-[#b79a85] px-4 py-2 rounded-lg">
-                                Ubah Password
+                        <div id="action-buttons">
+                            <button type="button" id="btn-edit" onclick="toggleEditMode()"
+                                class="border border-[#b79a85] text-[#7b5d4a] hover:bg-[#b79a85] hover:text-white transition px-5 py-2 rounded-lg font-medium shadow-sm">
+                                Edit Informasi ✏️
                             </button>
+
+                            <div id="btn-save-cancel" class="hidden flex gap-2">
+                                <button type="button" onclick="cancelEditMode()"
+                                    class="bg-gray-200 text-gray-700 px-5 py-2 rounded-lg font-medium hover:bg-gray-300 transition">
+                                    Batal
+                                </button>
+                                <button type="submit"
+                                    class="bg-[#3d2b1f] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#2a1d14] transition shadow-md">
+                                    Simpan
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                </div>
+                    {{-- TABLE / FORM --}}
+                    <div class="space-y-6">
 
+                        {{-- Nama Lengkap --}}
+                        <div class="grid grid-cols-2 border-b pb-4 items-center">
+                            <span class="font-semibold text-[#4b372d]">Nama Lengkap</span>
+                            <div>
+                                <span id="view-nama" class="font-medium text-gray-800">{{ Auth::user()->username }}</span>
+                                <input type="text" id="input-nama" name="username" value="{{ Auth::user()->username }}" 
+                                    class="hidden w-full border-b-2 border-[#b79a85] outline-none py-1 bg-transparent focus:border-[#3d2b1f] transition">
+                            </div>
+                        </div>
+
+                        {{-- Email (Read-only) --}}
+                        <div class="grid grid-cols-2 border-b pb-4 items-center">
+                            <span class="font-semibold text-[#4b372d]">Email</span>
+                            <div>
+                                <span class="font-medium text-gray-800">{{ Auth::user()->email }}</span>
+                            </div>
+                        </div>
+
+                        {{-- Nomor Telepon --}}
+                        <div class="grid grid-cols-2 border-b pb-4 items-center">
+                            <span class="font-semibold text-[#4b372d]">Nomor Telepon</span>
+                            <div>
+                                <span id="view-notelp" class="font-medium {{ (empty(Auth::user()->no_telp) || Auth::user()->no_telp == '-') ? 'text-gray-400 italic' : 'text-gray-800' }}">
+                                    {{ (empty(Auth::user()->no_telp) || Auth::user()->no_telp == '-') ? 'Lengkapi No Telepon' : Auth::user()->no_telp }}
+                                </span>
+                                
+                                <input type="text" id="input-notelp" name="no_telp" 
+                                    value="{{ (Auth::user()->no_telp == '-') ? '' : Auth::user()->no_telp }}" 
+                                    placeholder="08xxxxxxxxxx" 
+                                    class="hidden w-full border-b-2 border-[#b79a85] outline-none py-1 bg-transparent focus:border-[#3d2b1f] transition">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 items-center">
+                            <span class="font-semibold text-[#4b372d]">Password</span>
+                            <div class="flex justify-between items-center">
+                                <span>***********</span>
+                                <button type="button" class="border border-[#b79a85] text-[#7b5d4a] hover:bg-[#b79a85] hover:text-white transition px-4 py-2 rounded-lg font-medium">
+                                    Ubah Password
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
             </div>
 
 
@@ -361,6 +382,37 @@
                 document.getElementById('logout-form').submit();
             }
         });
+    }
+</script>
+
+{{-- SCRIPT INLINE EDIT --}}
+<script>
+    function toggleEditMode() {
+        // Sembunyiin teks biasa
+        document.getElementById('view-nama').classList.add('hidden');
+        document.getElementById('view-notelp').classList.add('hidden');
+        
+        // Munculin inputan
+        document.getElementById('input-nama').classList.remove('hidden');
+        document.getElementById('input-notelp').classList.remove('hidden');
+        
+        // Ganti tombol Edit jadi Simpan & Batal
+        document.getElementById('btn-edit').classList.add('hidden');
+        document.getElementById('btn-save-cancel').classList.remove('hidden');
+    }
+
+    function cancelEditMode() {
+        // Sembunyiin inputan
+        document.getElementById('input-nama').classList.add('hidden');
+        document.getElementById('input-notelp').classList.add('hidden');
+        
+        // Munculin teks biasa lagi
+        document.getElementById('view-nama').classList.remove('hidden');
+        document.getElementById('view-notelp').classList.remove('hidden');
+        
+        // Balikin tombol Edit
+        document.getElementById('btn-save-cancel').classList.add('hidden');
+        document.getElementById('btn-edit').classList.remove('hidden');
     }
 </script>
 
