@@ -14,6 +14,10 @@ Route::get('/register', function () {
     return view('auth.register');
 });
 
+Route::get('/login', function () {
+    return view('auth.login');
+});
+
 Route::get('/panduan', function () {
     return view('panduan');
 });
@@ -24,6 +28,7 @@ Route::get('/saved', function () {
 
 // routes for authentication
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
+
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 
 // acces role permissions
