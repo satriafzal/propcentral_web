@@ -90,14 +90,17 @@
             {{-- USER --}}
             <div class="flex items-center gap-4">
 
-                <div class="w-12 h-12 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-xl overflow-hidden shadow-inner">
-                    {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
-                </div>
+                @if(Auth::user()->foto_profil)
+                    <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto" 
+                        class="w-12 h-12 rounded-full object-cover shadow-inner border border-gray-200">
+                @else
+                    <div class="w-12 h-12 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-xl overflow-hidden shadow-inner">
+                        {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                    </div>
+                @endif
 
                 <div>
-                    <h3 class="font-bold">
-                            {{ Auth::user()->username }}
-                    </h3>
+                    <h3 class="font-bold text-gray-800 capitalize">{{ Auth::user()->username }}</h3>
                     <p class="text-sm text-gray-500">Pembeli</p>
                 </div>
 
@@ -124,20 +127,24 @@
             {{-- PROFILE CARD --}}
             <div class="bg-white rounded-2xl shadow p-8 flex justify-between items-start mb-8">
 
-                <div class="flex gap-6">
-                    <div class="w-28 h-28 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] text-5xl font-bold overflow-hidden shadow-inner">
-                        {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
-                    </div>
+                <div class="flex gap-6 items-center">
+
+                    @if(Auth::user()->foto_profil)
+                        <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto Profil" 
+                            class="w-28 h-28 rounded-full object-cover shadow-inner border-4 border-[#ead9ca]">
+                    @else
+                        <div class="w-28 h-28 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] text-5xl font-bold overflow-hidden shadow-inner">
+                            {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                        </div>
+                    @endif
 
                     <div>
                         <h2 class="text-3xl font-bold text-[#4b372d] capitalize">
                             {{ Auth::user()->username }}
                         </h2>
-
                         <span class="bg-[#ead9ca] text-[#7b5d4a] px-4 py-1 rounded-full text-sm font-semibold inline-block mt-2">
                             Pembeli
                         </span>
-
                         <p class="mt-4 text-[#9d8876] font-medium">
                             📅 Bergabung sejak {{ Auth::user()->created_at->format('F Y') }}
                         </p>
@@ -145,10 +152,18 @@
 
                 </div>
 
-                <button
-                    class="border border-[#b79a85] px-5 py-2 rounded-lg hover:bg-[#f5f0eb]">
-                    Edit Profil ✏️
-                </button>
+                <form id="form-photo" action="{{ route('profile.updatePhoto') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    
+                    <input type="file" name="foto" id="input-foto" class="hidden" accept="image/*" 
+                        onchange="document.getElementById('form-photo').submit()">
+                    
+                    <button type="button" onclick="document.getElementById('input-foto').click()" 
+                        class="border border-[#b79a85] text-[#7b5d4a] font-semibold px-5 py-2 rounded-lg hover:bg-[#f5f0eb] hover:shadow-sm transition active:scale-95">
+                        Edit Photo Profile
+                    </button>
+                </form>
 
             </div>
 
@@ -162,18 +177,25 @@
 
                     <div class="flex justify-between items-center mb-8">
                         <div class="flex items-center gap-4">
+                    
+                        @if(Auth::user()->foto_profil)
+                            <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto" 
+                                class="w-14 h-14 rounded-full object-cover shadow-inner border border-gray-200">
+                        @else
                             <div class="w-14 h-14 rounded-full bg-[#b68f70] flex items-center justify-center text-white text-2xl font-bold shadow-inner">
                                 {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
                             </div>
-                            <h2 class="text-3xl font-bold text-[#4b372d]">
-                                Informasi Pribadi
-                            </h2>
-                        </div>
+                        @endif
+
+                        <h2 class="text-3xl font-bold text-[#4b372d]">
+                            Informasi Pribadi
+                        </h2>
+                    </div>
 
                         <div id="action-buttons">
                             <button type="button" id="btn-edit" onclick="toggleEditMode()"
                                 class="border border-[#b79a85] text-[#7b5d4a] hover:bg-[#b79a85] hover:text-white transition px-5 py-2 rounded-lg font-medium shadow-sm">
-                                Edit Informasi ✏️
+                                Edit Informasi Pribadi
                             </button>
 
                             <div id="btn-save-cancel" class="hidden flex gap-2">
