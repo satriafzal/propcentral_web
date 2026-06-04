@@ -256,6 +256,17 @@
                         Hapus Akun
                     </a>
                 </li>
+                <li style="margin-top: 0.5rem;">
+                    <a href="#" onclick="confirmLogout()" class="danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                        </svg>
+                        Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </li>
             </ul>
         </aside>
 
@@ -542,6 +553,23 @@
                 if (result.isConfirmed) {
                     // TODO: submit form hapus akun ke backend
                     Swal.fire('Akun Dihapus', 'Akun Anda telah berhasil dihapus.', 'success');
+                }
+            });
+        }
+
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Ingin logout?',
+                text: "Jika logout, Anda harus login kembali untuk masuk",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626', 
+                cancelButtonColor: '#6b7280',     
+                confirmButtonText: 'Yes, Logout!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('logout-form').submit();
                 }
             });
         }

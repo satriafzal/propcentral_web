@@ -16,7 +16,6 @@
 
                 <a href="#"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
-                    🏠
                     <span class="font-medium">Dashboard</span>
                 </a>
 
@@ -24,13 +23,11 @@
 
                 <a href="#"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
-                    💬
                     <span class="font-medium">Chat</span>
                 </a>
 
                 <a href="#"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
-                    🏷️
                     <span class="font-medium">Penawaran Saya</span>
                 </a>
 
@@ -44,15 +41,7 @@
 
             </div>
 
-            {{-- LOGOUT --}}
-            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="button" onclick="confirmLogout()" 
-                    class="w-full flex items-center gap-3 p-3 text-red-500 font-semibold hover:bg-red-50 rounded-lg text-left transition">
-                    ↩
-                    Logout
-                </button>
-            </form>
+
 
         </div>
 
@@ -61,41 +50,6 @@
 
     {{-- MAIN CONTENT --}}
     <main class="flex-1">
-
-        {{-- TOPBAR --}}
-        <div class="bg-white border-b px-10 py-5 flex justify-between items-center">
-
-            {{-- SEARCH --}}
-            <div class="w-[400px] relative">
-                <input type="text"
-                    placeholder="Cari rumah"
-                    class="w-full bg-[#f3f1ef] rounded-full px-5 py-3 outline-none">
-
-                <span class="absolute right-5 top-3">
-                    🔍
-                </span>
-            </div>
-
-            {{-- USER --}}
-            <div class="flex items-center gap-4">
-
-                @if(Auth::user()->foto_profil)
-                    <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto" 
-                        class="w-12 h-12 rounded-full object-cover shadow-inner border border-gray-200">
-                @else
-                    <div class="w-12 h-12 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-xl overflow-hidden shadow-inner">
-                        {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
-                    </div>
-                @endif
-
-                <div>
-                    <h3 class="font-bold text-gray-800 capitalize">{{ Auth::user()->username }}</h3>
-                    <p class="text-sm text-gray-500">Pembeli</p>
-                </div>
-
-            </div>
-
-        </div>
 
 
         {{-- CONTENT --}}
@@ -131,11 +85,8 @@
                         <h2 class="text-3xl font-bold text-[#4b372d] capitalize">
                             {{ Auth::user()->username }}
                         </h2>
-                        <span class="bg-[#ead9ca] text-[#7b5d4a] px-4 py-1 rounded-full text-sm font-semibold inline-block mt-2">
-                            Pembeli
-                        </span>
                         <p class="mt-4 text-[#9d8876] font-medium">
-                            📅 Bergabung sejak {{ Auth::user()->created_at->format('F Y') }}
+                            Bergabung sejak {{ Auth::user()->created_at->format('F Y') }}
                         </p>
                     </div>
 
@@ -165,21 +116,9 @@
                     @method('PUT')
 
                     <div class="flex justify-between items-center mb-8">
-                        <div class="flex items-center gap-4">
-                    
-                        @if(Auth::user()->foto_profil)
-                            <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto" 
-                                class="w-14 h-14 rounded-full object-cover shadow-inner border border-gray-200">
-                        @else
-                            <div class="w-14 h-14 rounded-full bg-[#b68f70] flex items-center justify-center text-white text-2xl font-bold shadow-inner">
-                                {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
-                            </div>
-                        @endif
-
                         <h2 class="text-3xl font-bold text-[#4b372d]">
                             Informasi Pribadi
                         </h2>
-                    </div>
 
                         <div id="action-buttons">
                             <button type="button" id="btn-edit" onclick="toggleEditMode()"
@@ -374,27 +313,7 @@
 
 </div>
 
-{{-- for confirmation logout --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    function confirmLogout() {
-        Swal.fire({
-            title: 'Ingin logout?',
-            text: "Jika logout, silahkan login ulang untuk akses kelola profile",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3d2b1f', 
-            cancelButtonColor: '#d33',     
-            confirmButtonText: 'Yes, Logout!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('logout-form').submit();
-            }
-        });
-    }
-</script>
 
 {{-- SCRIPT INLINE EDIT --}}
 <script>

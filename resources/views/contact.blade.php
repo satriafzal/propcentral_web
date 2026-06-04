@@ -16,8 +16,7 @@
         <div class="bg-[#e9e2dc] p-10 rounded-lg shadow">
 
             <h2 class="text-3xl font-bold mb-4 flex items-center gap-2">
-                Contact US 
-                <span>👤</span>
+                Contact US
             </h2>
 
             <p class="text-gray-600 mb-10">
