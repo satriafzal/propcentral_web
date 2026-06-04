@@ -29,7 +29,13 @@
                 <input type="password" name="password" placeholder="Kata Sandi" required class="bg-transparent outline-none text-base w-full text-gray-700 placeholder-gray-400">
             </div>
 
-            <button type="submit" class="bg-gray-800 text-white rounded-full py-3 mt-8 text-lg font-semibold hover:bg-gray-700 transition shadow-md">
+            <div class="flex justify-end mt-1 mb-2">
+                <a href="{{ url('/forgot-password') }}" class="text-sm text-blue-600 font-medium hover:underline">
+                    Lupa Password?
+                </a>
+            </div>
+
+            <button type="submit" class="bg-gray-800 text-white rounded-full py-3 mt-4 text-lg font-semibold hover:bg-gray-700 transition shadow-md">
                 MASUK
             </button>
         </form>

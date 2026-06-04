@@ -12,7 +12,7 @@
 
     <div class="flex justify-between items-center mt-4 border-t pt-4">
         <button class="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all duration-300">
-            Sign up
+            Lihat Detail
         </button>
 
         <span class="font-bold text-lg text-gray-900">{{ $price }}</span>

@@ -31,6 +31,18 @@ Route::post('/register', [AuthController::class, 'registerPost'])->name('registe
 
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 
+Route::get('/verify-email', function () {
+    return view('auth.verify-email');
+});
+
+Route::get('/reset-password', function () {
+    return view('auth.reset-password');
+});
+
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+});
+
 // acces role permissions
 Route::middleware('auth')->group(function () {
 
@@ -44,6 +56,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/jual', function () {
         return view('jual');
+    });
+
+    Route::get('/settings', function () {
+        return view('settings');
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

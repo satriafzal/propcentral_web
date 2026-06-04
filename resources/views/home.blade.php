@@ -84,16 +84,27 @@
         
         <div class="grid grid-cols-3 gap-6">
             
-            @for ($i = 0; $i < 6; $i++)
+            @php
+            $popularProps = [
+                ['img'=>'property_obsidian.png', 'loc'=>'Beverly Hills, CA',   'rooms'=>5, 'size'=>'4,200', 'price'=>'$2,450,000'],
+                ['img'=>'property_penthouse.png','loc'=>'Upper West Side, NY', 'rooms'=>2, 'size'=>'1,850', 'price'=>'$890,000'],
+                ['img'=>'property_azure.png',    'loc'=>'Malibu, CA',          'rooms'=>4, 'size'=>'3,100', 'price'=>'$1,720,000'],
+                ['img'=>'property_obsidian.png', 'loc'=>'Beverly Hills, CA',   'rooms'=>5, 'size'=>'4,200', 'price'=>'$2,450,000'],
+                ['img'=>'property_penthouse.png','loc'=>'Upper West Side, NY', 'rooms'=>2, 'size'=>'1,850', 'price'=>'$890,000'],
+                ['img'=>'property_azure.png',    'loc'=>'Malibu, CA',          'rooms'=>4, 'size'=>'3,100', 'price'=>'$1,720,000'],
+            ];
+            @endphp
+            
+            @foreach ($popularProps as $prop)
             @component('component.properti-card', [
-            'image' => '/images/house.png',
-            'location' => 'San Francisco, California',
-            'rooms' => 4,
-            'size' => '3,500',
-                    'price' => '$2,500,000'
-                    ])
-                @endcomponent
-            @endfor
+                'image' => asset('assets/images/' . $prop['img']),
+                'location' => $prop['loc'],
+                'rooms' => $prop['rooms'],
+                'size' => $prop['size'],
+                'price' => $prop['price']
+            ])
+            @endcomponent
+            @endforeach
 
         </div>
     </div>

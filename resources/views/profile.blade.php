@@ -9,13 +9,6 @@
     {{-- SIDEBAR --}}
     <aside class="w-[260px] bg-white border-r min-h-screen">
 
-        {{-- LOGO --}}
-        <div class="p-6 border-b">
-            <h1 class="text-3xl font-bold text-[#4b372d]">
-                PropCentral
-            </h1>
-        </div>
-
         {{-- MENU --}}
         <div class="p-5 flex flex-col justify-between h-[90%]">
 
@@ -27,11 +20,7 @@
                     <span class="font-medium">Dashboard</span>
                 </a>
 
-                <a href="#"
-                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
-                    ❤️
-                    <span class="font-medium">Favorit</span>
-                </a>
+
 
                 <a href="#"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
@@ -47,7 +36,7 @@
 
                 <hr class="my-4">
 
-                <a href="#"
+                <a href="{{ url('/settings') }}"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
                     ⚙️
                     <span class="font-medium">Pengaturan Akun</span>
@@ -73,37 +62,7 @@
     {{-- MAIN CONTENT --}}
     <main class="flex-1">
 
-        {{-- TOPBAR --}}
-        <div class="bg-white border-b px-10 py-5 flex justify-between items-center">
 
-            {{-- SEARCH --}}
-            <div class="w-[400px] relative">
-                <input type="text"
-                    placeholder="Cari rumah"
-                    class="w-full bg-[#f3f1ef] rounded-full px-5 py-3 outline-none">
-
-                <span class="absolute right-5 top-3">
-                    🔍
-                </span>
-            </div>
-
-            {{-- USER --}}
-            <div class="flex items-center gap-4">
-
-                <div class="w-12 h-12 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-xl overflow-hidden shadow-inner">
-                    {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
-                </div>
-
-                <div>
-                    <h3 class="font-bold">
-                            {{ Auth::user()->username }}
-                    </h3>
-                    <p class="text-sm text-gray-500">Pembeli</p>
-                </div>
-
-            </div>
-
-        </div>
 
 
         {{-- CONTENT --}}
@@ -133,10 +92,6 @@
                         <h2 class="text-3xl font-bold text-[#4b372d] capitalize">
                             {{ Auth::user()->username }}
                         </h2>
-
-                        <span class="bg-[#ead9ca] text-[#7b5d4a] px-4 py-1 rounded-full text-sm font-semibold inline-block mt-2">
-                            Pembeli
-                        </span>
 
                         <p class="mt-4 text-[#9d8876] font-medium">
                             📅 Bergabung sejak {{ Auth::user()->created_at->format('F Y') }}
@@ -229,9 +184,9 @@
                             <span class="font-semibold text-[#4b372d]">Password</span>
                             <div class="flex justify-between items-center">
                                 <span>***********</span>
-                                <button type="button" class="border border-[#b79a85] text-[#7b5d4a] hover:bg-[#b79a85] hover:text-white transition px-4 py-2 rounded-lg font-medium">
+                                <a href="{{ url('/verify-email') }}" class="border border-[#b79a85] text-[#7b5d4a] hover:bg-[#b79a85] hover:text-white transition px-4 py-2 rounded-lg font-medium inline-block text-center">
                                     Ubah Password
-                                </button>
+                                </a>
                             </div>
                         </div>
 
