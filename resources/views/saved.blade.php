@@ -45,7 +45,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row overflow-hidden group hover:shadow-xl transition-all duration-300">
 
                 <div class="w-full md:w-[38%] relative overflow-hidden h-56 md:h-auto">
-                    <img src="/assets/images/${prop.img}"
+                    <img src="${prop.img}"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute top-4 left-4">
                         <span class="bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">${prop.badge}</span>

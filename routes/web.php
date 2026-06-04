@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AssistantController;
+use App\Http\Controllers\PropertyController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -39,9 +40,7 @@ Route::get('/seller-profile', function () {
     return view('seller-profile');
 });
 
-Route::get('/property-detail', function () {
-    return view('property-detail');
-});
+Route::get('/property/{id}', [PropertyController::class, 'show'])->name('property.show');
 
 // routes for authentication
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
@@ -57,9 +56,8 @@ Route::middleware('auth')->group(function () {
         return view('profile');
     });
 
-    Route::get('/property', function () {
-        return view('property');
-    });
+    Route::get('/property', [PropertyController::class, 'index'])->name('property.index');
+    Route::post('/property', [PropertyController::class, 'store'])->name('property.store');
 
     Route::get('/jual', function () {
         return view('jual');

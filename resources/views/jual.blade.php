@@ -23,7 +23,28 @@
 
         {{-- Right Column: Form Cards --}}
         <div class="lg:w-2/3">
-            <form action="#" method="POST" class="flex flex-col gap-8">
+            @if ($errors->any())
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-xl">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">Terdapat kesalahan pada input:</h3>
+                            <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <form action="{{ route('property.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-8">
+                @csrf
                 
                 {{-- 1. Basic Information --}}
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -37,20 +58,20 @@
                     <div class="space-y-5">
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Judul Properti</label>
-                            <input type="text" placeholder="misal. Villa Modern Minimalis di Uluwatu" class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                            <input type="text" name="title" required placeholder="misal. Villa Modern Minimalis di Uluwatu" class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Deskripsi</label>
-                            <textarea rows="4" placeholder="Jelaskan fitur unik dan nilai jual properti Anda..." class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all resize-none"></textarea>
+                            <textarea rows="4" name="description" required placeholder="Jelaskan fitur unik dan nilai jual properti Anda..." class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all resize-none"></textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm text-gray-600 mb-2">Harga (Rp)</label>
-                                <input type="number" placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                                <input type="number" name="price" required placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-2">Tipe Properti</label>
-                                <select class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all bg-white">
+                                <select name="type" required class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all bg-white">
                                     <option>Rumah</option>
                                     <option>Apartemen</option>
                                     <option>Vila</option>
@@ -74,27 +95,27 @@
                     <div class="grid grid-cols-3 gap-5">
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Luas Tanah (m²)</label>
-                            <input type="number" placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                            <input type="number" name="land_area" required placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Luas Bangunan (m²)</label>
-                            <input type="number" placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                            <input type="number" name="building_area" required placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Kamar Tidur</label>
-                            <input type="number" placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                            <input type="number" name="bedroom" required placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Kamar Mandi</label>
-                            <input type="number" placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                            <input type="number" name="bathroom" required placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Kapasitas Garasi</label>
-                            <input type="number" placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                            <input type="number" name="garage" required placeholder="0" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Sertifikat</label>
-                            <select class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all bg-white">
+                            <select name="certificate" required class="w-full border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all bg-white">
                                 <option>SHM (Hak Milik)</option>
                                 <option>HGB (Hak Guna Bangunan)</option>
                                 <option>Strata Title</option>
@@ -117,7 +138,7 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Alamat Lengkap</label>
-                            <input type="text" placeholder="Masukkan alamat lengkap properti" class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                            <input type="text" name="address" required placeholder="Masukkan alamat lengkap properti" class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
                         </div>
                         
                         {{-- Map Container --}}
@@ -144,16 +165,17 @@
                     </div>
 
                     {{-- Upload Area --}}
-                    <div class="border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50/50 p-10 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors cursor-pointer mb-6">
+                    <label for="images" class="border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50/50 p-10 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors cursor-pointer mb-6 block w-full">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-400 mb-3">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                         </svg>
                         <p class="text-gray-800 font-medium mb-1">Unggah Foto Properti</p>
                         <p class="text-gray-400 text-xs">Maksimal 5 foto, ukuran maks 2MB per foto. Disarankan orientasi lanskap.</p>
-                    </div>
+                        <input type="file" name="images[]" id="images" multiple accept="image/*" class="hidden" required>
+                    </label>
 
                     {{-- Thumbnails --}}
-                    <div class="grid grid-cols-5 gap-4">
+                    <div class="grid grid-cols-5 gap-4" id="thumbnailContainer">
                         @for($i=0; $i<5; $i++)
                         <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 border border-gray-200">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -204,6 +226,87 @@
             latInput.value = position.lat;
             lngInput.value = position.lng;
         });
+
+        // ================= Image Preview Logic =================
+        const imageInput = document.getElementById('images');
+        const thumbnailContainer = document.getElementById('thumbnailContainer');
+        let dataTransfer = new DataTransfer();
+
+        imageInput.addEventListener('change', function(e) {
+            // Add new files to dataTransfer up to 5 max
+            for (let i = 0; i < this.files.length; i++) {
+                if (dataTransfer.items.length < 5) {
+                    dataTransfer.items.add(this.files[i]);
+                } else {
+                    alert("Maksimal 5 foto yang bisa diunggah.");
+                    break;
+                }
+            }
+            // Update input files with our managed list
+            this.files = dataTransfer.files;
+            renderThumbnails();
+        });
+
+        function renderThumbnails() {
+            thumbnailContainer.innerHTML = '';
+            const files = imageInput.files;
+            
+            for (let i = 0; i < 5; i++) {
+                if (i < files.length) {
+                    const file = files[i];
+                    const reader = new FileReader();
+                    
+                    const box = document.createElement('div');
+                    box.className = "aspect-square rounded-xl overflow-hidden relative group border border-gray-200 shadow-sm";
+                    
+                    const img = document.createElement('img');
+                    img.className = "w-full h-full object-cover";
+                    
+                    reader.onload = function(e) {
+                        img.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                    
+                    const overlay = document.createElement('div');
+                    overlay.className = "absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center";
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.type = "button";
+                    deleteBtn.className = "bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors shadow-lg scale-90 group-hover:scale-100";
+                    deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
+                    deleteBtn.onclick = function(e) {
+                        e.preventDefault();
+                        removeImage(i);
+                    };
+                    
+                    overlay.appendChild(deleteBtn);
+                    box.appendChild(img);
+                    box.appendChild(overlay);
+                    
+                    thumbnailContainer.appendChild(box);
+                } else {
+                    const box = document.createElement('div');
+                    box.className = "aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 border border-gray-200";
+                    box.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" /></svg>';
+                    thumbnailContainer.appendChild(box);
+                }
+            }
+        }
+
+        function removeImage(index) {
+            const newDataTransfer = new DataTransfer();
+            const files = imageInput.files;
+            
+            for (let i = 0; i < files.length; i++) {
+                if (i !== index) {
+                    newDataTransfer.items.add(files[i]);
+                }
+            }
+            
+            imageInput.files = newDataTransfer.files;
+            dataTransfer = newDataTransfer; // sync state
+            renderThumbnails();
+        }
     });
 </script>
 

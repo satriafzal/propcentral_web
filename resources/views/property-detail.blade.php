@@ -12,59 +12,7 @@
         margin: 0 auto;
         padding: 2rem 1.5rem;
     }
-    
-    .gallery-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        height: 480px;
-    }
-    
-    .gallery-main {
-        height: 100%;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-    
-    .gallery-side {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        height: 100%;
-    }
-    
-    .gallery-side-img {
-        flex: 1;
-        border-radius: 12px;
-        overflow: hidden;
-        position: relative;
-    }
-    
-    .gallery-main img, .gallery-side-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
 
-    .see-more-btn {
-        position: absolute;
-        bottom: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(61, 43, 31, 0.85); /* Dark brown with opacity */
-        color: white;
-        font-size: 0.875rem;
-        font-weight: 600;
-        padding: 0.5rem 1.5rem;
-        border-radius: 6px;
-        backdrop-filter: blur(4px);
-        transition: background-color 0.2s;
-    }
-
-    .see-more-btn:hover {
-        background-color: rgba(42, 29, 20, 0.95);
-    }
     
     .btn-chat {
         background-color: #3d2b1f;
@@ -99,20 +47,34 @@
 <div class="detail-container">
     
     {{-- Photo Gallery --}}
-    <div class="gallery-grid">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 h-64 md:h-[360px]">
         {{-- Main Image --}}
-        <div class="gallery-main">
-            <img src="{{ asset('assets/images/property_obsidian.png') }}" alt="Main View">
+        <div class="md:col-span-2 rounded-xl overflow-hidden min-h-0 h-full">
+            @if($property->images->count() > 0)
+                <img src="{{ asset('storage/' . $property->images[0]->image_path) }}" alt="Main View" class="w-full h-full object-cover">
+            @else
+                <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">No Image</div>
+            @endif
         </div>
         
         {{-- Side Images --}}
-        <div class="gallery-side">
-            <div class="gallery-side-img">
-                <img src="{{ asset('assets/images/property_penthouse.png') }}" alt="Side View 1">
+        <div class="flex flex-col gap-4 h-full min-h-0">
+            <div class="flex-1 rounded-xl overflow-hidden min-h-0 relative">
+                @if($property->images->count() > 1)
+                    <img src="{{ asset('storage/' . $property->images[1]->image_path) }}" alt="Side View 1" class="w-full h-full object-cover">
+                @else
+                    <div class="w-full h-full bg-gray-200"></div>
+                @endif
             </div>
-            <div class="gallery-side-img">
-                <img src="{{ asset('assets/images/property_azure.png') }}" alt="Side View 2">
-                <button class="see-more-btn">see more</button>
+            <div class="flex-1 rounded-xl overflow-hidden min-h-0 relative">
+                @if($property->images->count() > 2)
+                    <img src="{{ asset('storage/' . $property->images[2]->image_path) }}" alt="Side View 2" class="w-full h-full object-cover">
+                @else
+                    <div class="w-full h-full bg-gray-200"></div>
+                @endif
+                <button onclick="openGalleryModal()" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#3d2b1f]/85 text-white text-sm font-semibold px-6 py-2 rounded-md backdrop-blur-sm hover:bg-[#2a1d14]/95 transition-colors shadow-sm">
+                    see more
+                </button>
             </div>
         </div>
     </div>
@@ -120,11 +82,11 @@
     {{-- Title and Price Header --}}
     <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 mt-4">
         <div>
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-2">Taman Heulang, Bogor</h1>
-            <p class="text-gray-500 text-sm">Jl. Heulang, RT.06/RW.04, Tanah Sareal, Kota Bogor, Jawa Barat 16161</p>
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-2">{{ $property->title }}</h1>
+            <p class="text-gray-500 text-sm">{{ $property->address }}</p>
         </div>
         <div class="mt-4 md:mt-0 text-3xl font-bold text-gray-900">
-            Rp 1.000.000.000
+            Rp {{ number_format($property->price, 0, ',', '.') }}
         </div>
     </div>
     
@@ -133,12 +95,16 @@
         {{-- Profile --}}
         <div class="flex items-center gap-4">
             <div class="w-14 h-14 bg-[#e5e5e5] rounded-full flex items-center justify-center overflow-hidden">
-                <div class="w-full h-full bg-[#d6d6d6] flex items-center justify-center text-gray-600 font-bold text-xl">
-                    {{-- Placeholder Avatar matching gray circle --}}
-                </div>
+                @if($property->user && $property->user->foto_profil)
+                    <img src="{{ asset('storage/profile_photos/' . $property->user->foto_profil) }}" class="w-full h-full object-cover">
+                @else
+                    <div class="w-full h-full bg-[#d6d6d6] flex items-center justify-center text-gray-600 font-bold text-xl">
+                        {{ $property->user ? strtoupper(substr($property->user->nama, 0, 1)) : 'U' }}
+                    </div>
+                @endif
             </div>
             <div>
-                <div class="font-bold text-gray-900 text-[15px]">Nama_User</div>
+                <div class="font-bold text-gray-900 text-[15px]">{{ $property->user ? $property->user->nama : 'User' }}</div>
                 <div class="text-xs text-gray-500">Penjual</div>
             </div>
         </div>
@@ -160,48 +126,116 @@
         {{-- Type --}}
         <div>
             <h3 class="section-title">Type</h3>
-            <p class="section-content">Rumah</p>
+            <p class="section-content">{{ $property->type }}</p>
         </div>
         
         {{-- Deskripsi --}}
         <div>
             <h3 class="section-title">Deskripsi</h3>
             <p class="section-content">
-                Hunian siap huni dengan kondisi bangunan yang masih terawat dan terjaga dengan baik, sehingga memberikan kenyamanan bagi penghuni<br>
-                tanpa memerlukan perbaikan besar di awal. Rumah ini berada di lingkungan yang tenang, aman, dan nyaman, sangat cocok untuk tempat tinggal bersama keluarga.<br>
-                Selain itu, lokasinya strategis dengan akses yang mudah ke berbagai fasilitas umum seperti sekolah, pusat perbelanjaan, tempat ibadah, serta sarana transportasi,<br>
-                sehingga mendukung aktivitas sehari-hari menjadi lebih praktis dan efisien.
+                {!! nl2br(e($property->description)) !!}
             </p>
         </div>
         
         {{-- Fasilitas --}}
         <div>
             <h3 class="section-title">Fasilitas</h3>
-            <p class="section-content">4 Bed</p>
+            <p class="section-content">{{ $property->bedroom }} Kamar Tidur, {{ $property->bathroom }} Kamar Mandi, {{ $property->garage }} Garasi</p>
+        </div>
+        
+        {{-- Sertifikat --}}
+        <div>
+            <h3 class="section-title">Sertifikat</h3>
+            <p class="section-content">{{ $property->certificate }}</p>
         </div>
         
         {{-- Luas Tanah --}}
         <div>
             <h3 class="section-title">Luas Tanah</h3>
-            <p class="section-content">70 m2</p>
+            <p class="section-content">{{ $property->land_area }} m²</p>
         </div>
         
         {{-- Luas Bangunan --}}
         <div>
             <h3 class="section-title">Luas Bangunan</h3>
-            <p class="section-content">50 m2</p>
+            <p class="section-content">{{ $property->building_area }} m²</p>
         </div>
         
         {{-- Lokasi Map --}}
         <div class="mt-2">
             <h3 class="section-title mb-4">Lokasi</h3>
-            <div class="w-full md:w-1/2 h-72 bg-[#e5e5e5] rounded-sm flex items-center justify-center text-gray-400">
-                {{-- Map Placeholder matching the gray box in design --}}
+            <div id="propertyMap" class="w-full md:w-1/2 h-72 rounded-sm border border-gray-200 z-10">
+                {{-- Map will be injected here --}}
             </div>
         </div>
             
     </div>
     
 </div>
+
+{{-- Gallery Modal --}}
+<div id="galleryModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 backdrop-blur-sm transition-opacity" onclick="closeGalleryModal()"></div>
+    <div class="fixed inset-0 z-[100] overflow-y-auto pointer-events-none">
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-4xl p-6 pointer-events-auto">
+                
+                {{-- Modal Header --}}
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900">Galeri Properti</h3>
+                    <button onclick="closeGalleryModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                {{-- Modal Content: Grid of 5 images --}}
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    @foreach($property->images as $index => $img)
+                        @if($index == 0)
+                            <div class="col-span-2 row-span-2 rounded-xl overflow-hidden h-[400px]">
+                                <img src="{{ asset('storage/' . $img->image_path) }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" alt="Gallery {{ $index + 1 }}">
+                            </div>
+                        @else
+                            <div class="col-span-1 rounded-xl overflow-hidden h-[192px]">
+                                <img src="{{ asset('storage/' . $img->image_path) }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" alt="Gallery {{ $index + 1 }}">
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    function openGalleryModal() {
+        document.getElementById('galleryModal').classList.remove('hidden');
+    }
+
+    function closeGalleryModal() {
+        document.getElementById('galleryModal').classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        @if($property->latitude && $property->longitude)
+            const lat = {{ $property->latitude }};
+            const lng = {{ $property->longitude }};
+            
+            const map = L.map('propertyMap').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+            
+            L.marker([lat, lng]).addTo(map);
+        @else
+            document.getElementById('propertyMap').innerHTML = '<div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">Koordinat peta tidak tersedia</div>';
+        @endif
+    });
+</script>
 
 @endsection
