@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AssistantController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -12,10 +13,6 @@ Route::get('/contact', function (){
 
 Route::get('/register', function () {
     return view('auth.register');
-});
-
-Route::get('/login', function () {
-    return view('auth.login');
 });
 
 Route::get('/panduan', function () {
@@ -28,22 +25,12 @@ Route::get('/saved', function () {
 
 // routes for authentication
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
-
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 
-Route::get('/verify-email', function () {
-    return view('auth.verify-email');
-});
+// for ai assistant
+Route::post('/assistant/chat', [AssistantController::class, 'chat'])->name('assistant.chat');
 
-Route::get('/reset-password', function () {
-    return view('auth.reset-password');
-});
-
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-});
-
-// acces role permissions
+// for acces role permissions
 Route::middleware('auth')->group(function () {
 
     Route::get('/profile', function () {
@@ -66,4 +53,7 @@ Route::middleware('auth')->group(function () {
 
     // for update profile user
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+    // for update profile photo user
+    Route::put('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.updatePhoto');
 });

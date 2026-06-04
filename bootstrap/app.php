@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(function (\Illuminate\Http\Request $request) {
-            session()->flash('error', 'Harap login untuk akses halaman lebih lanjut atau akses properti lainnya!');
+            session()->flash('error', 'Harap login untuk akses halaman lebih lanjut!');
+
+            session()->flash('auto_open_login', true);
+
             return url('/');
         });
     })
