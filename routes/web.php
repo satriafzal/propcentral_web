@@ -35,6 +35,14 @@ Route::get('/saved', function () {
     return view('saved');
 });
 
+Route::get('/seller-profile', function () {
+    return view('seller-profile');
+});
+
+Route::get('/property-detail', function () {
+    return view('property-detail');
+});
+
 // routes for authentication
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
