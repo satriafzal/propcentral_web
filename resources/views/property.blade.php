@@ -218,4 +218,23 @@
     </div>
 </section>
 
+{{-- for notification location --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(request()->filled('city') && $properties->isEmpty())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'info',
+                title: 'Tidak Ditemukan',
+                text: 'Tidak ada penjualan properti di lokasi "{{ request('city') }}"',
+                confirmButtonText: 'Lihat Semua Properti',
+                confirmButtonColor: '#3d2b1f',
+                allowOutsideClick: false
+            }).then((result) => {
+                window.location.href = "{{ url('/') }}";
+            });
+        });
+    </script>
+@endif
+
 @endsection
