@@ -50,7 +50,7 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                     <div class="flex items-center gap-2 mb-6 text-gray-800">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                         </svg>
                         <h2 class="text-xl font-bold">Informasi Dasar</h2>
                     </div>
@@ -139,6 +139,20 @@
                         <div>
                             <label class="block text-sm text-gray-600 mb-2">Alamat Lengkap</label>
                             <input type="text" name="address" required placeholder="Masukkan alamat lengkap properti" class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Kota</label>
+                            <input type="text" name="city" list="daftar-kota-jual" required placeholder="Contoh: Jakarta Selatan, Depok, dll..." class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all">
+                            
+                            {{-- Datalist Autocomplete --}}
+                            @if(isset($cities))
+                            <datalist id="daftar-kota-jual">
+                                @foreach($cities as $c)
+                                    <option value="{{ $c }}">
+                                @endforeach
+                            </datalist>
+                            @endif
                         </div>
                         
                         {{-- Map Container --}}
@@ -309,5 +323,7 @@
         }
     });
 </script>
+@endif
+
 
 @endsection
