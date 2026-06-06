@@ -9,10 +9,6 @@ use App\Http\Controllers\ChatController;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/contact', function (){
-    return view('contact');
-});
-
 Route::get('/register', function () {
     return view('auth.register');
 });
@@ -67,6 +63,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', function () {
         return view('settings');
     });
+
+    // for crud penawaran saya
+    Route::get('/penawaran-saya', [PropertyController::class, 'myOffers'])->name('penawaran-saya');
+    Route::get('/property/{id}/edit', [PropertyController::class, 'edit'])->name('property.edit');
+    Route::put('/property/{id}', [PropertyController::class, 'update'])->name('property.update');
+    Route::delete('/property/{id}', [PropertyController::class, 'destroy'])->name('property.destroy');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

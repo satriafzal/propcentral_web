@@ -26,7 +26,7 @@
                     <span class="font-medium">Chat</span>
                 </a>
 
-                <a href="#"
+                <a href="{{ url('/penawaran-saya') }}"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
                     <span class="font-medium">Penawaran Saya</span>
                 </a>
@@ -40,8 +40,6 @@
                 </a>
 
             </div>
-
-
 
         </div>
 
