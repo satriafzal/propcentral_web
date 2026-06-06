@@ -21,7 +21,7 @@
 
 
 
-                <a href="#"
+                <a href="{{ url('/chat') }}"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
                     <span class="font-medium">Chat</span>
                 </a>
@@ -214,7 +214,7 @@
                                         Rumah Favorit
                                     </h3>
 
-                                    <p class="text-4xl font-bold">12</p>
+                                    <p id="saved-count" class="text-4xl font-bold">0</p>
                                 </div>
                             </div>
 
@@ -261,10 +261,10 @@
                             Percakapan aktif dengan penjual rumah
                         </p>
 
-                        <button
-                            class="w-full bg-[#6f5644] text-white py-3 rounded-xl">
+                        <a href="{{ url('/chat') }}"
+                            class="w-full block text-center bg-[#6f5644] text-white py-3 rounded-xl">
                             Lihat Chat
-                        </button>
+                        </a>
 
                     </div>
 
@@ -344,6 +344,18 @@
         document.getElementById('btn-save-cancel').classList.add('hidden');
         document.getElementById('btn-edit').classList.remove('hidden');
     }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+        const userId = {{ auth()->check() ? auth()->id() : 'null' }};
+        const SAVE_KEY = isLoggedIn ? 'propcentral_saved_' + userId : 'propcentral_saved';
+        
+        const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '[]');
+        const countElem = document.getElementById('saved-count');
+        if (countElem) countElem.textContent = saved.length;
+    });
 </script>
 
 @endsection

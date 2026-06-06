@@ -5,9 +5,10 @@
 {{-- Inject auth state for JS --}}
 <script>
     const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    const userId = {{ auth()->check() ? auth()->id() : 'null' }};
 
     /* ───── Saved Properties (localStorage) ───── */
-    const SAVE_KEY = 'propcentral_saved';
+    const SAVE_KEY = isLoggedIn ? 'propcentral_saved_' + userId : 'propcentral_saved';
 
     function getSaved() {
         return JSON.parse(localStorage.getItem(SAVE_KEY) || '[]');

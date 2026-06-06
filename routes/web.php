@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -74,4 +75,10 @@ Route::middleware('auth')->group(function () {
 
     // for update profile photo user
     Route::put('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.updatePhoto');
+
+    // Chat routes
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{user}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{user}', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/{user}/messages', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
 });

@@ -111,12 +111,23 @@
         
         {{-- Chat Button --}}
         <div class="mt-4 md:mt-0">
-            <button class="btn-chat px-6 py-2 text-sm rounded-md shadow-sm">
-                Chat Penjual
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-1">
-                  <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.022 4.573 2.706 6.092.393.354.906.518 1.431.572.241.025.485.013.72-.036z" clip-rule="evenodd" />
-                </svg>
-            </button>
+            @auth
+                @if(Auth::id() !== $property->user_id)
+                <a href="{{ route('chat.show', $property->user_id) }}" class="btn-chat px-6 py-2 text-sm rounded-md shadow-sm hover:no-underline">
+                    Chat Penjual
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-1">
+                      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.022 4.573 2.706 6.092.393.354.906.518 1.431.572.241.025.485.013.72-.036z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                @endif
+            @else
+                <button onclick="openLogin()" class="btn-chat px-6 py-2 text-sm rounded-md shadow-sm">
+                    Chat Penjual
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-1">
+                      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.022 4.573 2.706 6.092.393.354.906.518 1.431.572.241.025.485.013.72-.036z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            @endauth
         </div>
     </div>
     

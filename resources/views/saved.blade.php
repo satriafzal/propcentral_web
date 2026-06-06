@@ -5,7 +5,9 @@
 @section('content')
 
 <script>
-    const SAVE_KEY = 'propcentral_saved';
+    const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    const userId = {{ auth()->check() ? auth()->id() : 'null' }};
+    const SAVE_KEY = isLoggedIn ? 'propcentral_saved_' + userId : 'propcentral_saved';
 
     function getSaved() {
         return JSON.parse(localStorage.getItem(SAVE_KEY) || '[]');
