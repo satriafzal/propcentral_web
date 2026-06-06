@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('simpan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('rumah_id')->constrained('rumah')->onDelete('cascade');
+            $table->foreignId('rumah_id')->constrained('properties')->onDelete('cascade');
             $table->timestamps();
         });
     }
