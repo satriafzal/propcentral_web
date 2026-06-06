@@ -10,11 +10,23 @@ use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         // Get all properties with their images and owner
-        $properties = Property::with(['images', 'user'])->latest()->get();
-        return view('property', compact('properties'));
+        $query = Property::with(['images', 'user'])->latest();
+
+        // check if there is a search query for city, if yes, filter the properties by city
+        if ($request->filled('city')) {
+            $query->where('city', 'like', '%' . $request->city . '%');
+        }
+
+        // get data after filtering and sorting update
+        $properties = $query->get();
+
+        // get distinct cities from properties for filter options in the view
+        $cities = Property::select('city')->distinct()->whereNotNull('city')->pluck('city');
+
+        return view('property', compact('properties', 'cities')); 
     }
 
     public function store(Request $request)
@@ -31,6 +43,7 @@ class PropertyController extends Controller
             'garage' => 'required|integer',
             'certificate' => 'required|string',
             'address' => 'required|string',
+            'city' => 'required|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
             'images' => 'required|array|max:5',
@@ -50,6 +63,7 @@ class PropertyController extends Controller
             'garage' => $request->garage,
             'certificate' => $request->certificate,
             'address' => $request->address,
+            'city' => $request->city,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
         ]);
@@ -135,6 +149,7 @@ class PropertyController extends Controller
             'garage' => 'required|integer',
             'certificate' => 'required|string',
             'address' => 'required|string',
+            'city' => 'required|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
             'images' => 'nullable|array|max:5',
@@ -154,6 +169,7 @@ class PropertyController extends Controller
             'garage' => $request->garage,
             'certificate' => $request->certificate,
             'address' => $request->address,
+            'city' => $request->city,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
         ]);
