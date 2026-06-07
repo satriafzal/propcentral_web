@@ -44,7 +44,8 @@ class ChatController extends Controller
     public function sendMessage(Request $request, $userId)
     {
         $request->validate([
-            'body' => 'required|string',
+            'body' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         $currentUserId = Auth::id();
@@ -60,10 +61,16 @@ class ChatController extends Controller
             ['user_one_id' => $userOne, 'user_two_id' => $userTwo]
         );
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('chat_images', 'public');
+        }
+        
         $message = $conversation->messages()->create([
             'sender_id' => $currentUserId,
             'body' => $request->body,
             'is_read' => false,
+            'image' => $imagePath,
         ]);
 
         $conversation->update(['last_message_at' => now()]);

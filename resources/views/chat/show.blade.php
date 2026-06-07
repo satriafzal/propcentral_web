@@ -86,9 +86,11 @@
                         <div class="relative">
                             <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
                                 @if($userItem->foto_profil)
-                                    <img src="{{ asset('storage/profile_photos/' . $userItem->foto_profil) }}" class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/' . $userItem->foto_profil) }}" class="w-full h-full object-cover">
                                 @else
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($userItem->nama) }}&background=EAD9CA&color=4B372D" class="w-full h-full object-cover">
+                                    <div class="w-full h-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-xl uppercase">
+                                        {{ substr($userItem->nama, 0, 1) }}
+                                    </div>
                                 @endif
                             </div>
                             <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
@@ -147,8 +149,14 @@
         </div>
         @else
         <div class="p-4 border-b border-gray-100 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 font-bold text-sm flex-shrink-0">
-                {{ strtoupper(substr($otherUser->nama, 0, 1)) }}
+            <div class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden">
+                @if($otherUser->foto_profil)
+                    <img src="{{ asset('storage/' . $otherUser->foto_profil) }}" class="w-full h-full object-cover">
+                @else
+                    <div class="w-full h-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-lg uppercase">
+                        {{ substr($otherUser->nama, 0, 1) }}
+                    </div>
+                @endif
             </div>
             <div>
                 <h3 class="font-bold text-sm text-gray-900">{{ $otherUser->nama }}</h3>
@@ -190,7 +198,14 @@
                         <!-- My Message (Right) -->
                         <div class="flex justify-end w-full group message-item" data-id="{{ $msg->id }}">
                             <div class="max-w-[75%] bubble-right px-6 py-4 relative">
-                                <p class="text-[14px] leading-relaxed">{{ $msg->body }}</p>
+                                @if($msg->image)
+                                    <div class="mb-2">
+                                        <img src="{{ asset('storage/' . $msg->image) }}" class="rounded-xl max-w-full w-64 object-cover shadow-sm border border-black/5" alt="Uploaded Image">
+                                    </div>
+                                @endif
+                                @if($msg->body)
+                                    <p class="text-[14px] leading-relaxed">{{ $msg->body }}</p>
+                                @endif
                                 <div class="flex justify-end items-center mt-2 gap-1 text-[10px] text-[#9a887a]">
                                     <span>{{ $msg->created_at->format('H:i') }}</span>
                                     @if($msg->is_read)
@@ -209,17 +224,25 @@
                         <!-- Other User's Message (Left) -->
                         <div class="flex w-full group message-item" data-id="{{ $msg->id }}">
                             <div class="flex-shrink-0 mr-3 mt-auto mb-1">
-                                <div class="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-tr from-green-400 to-amber-200">
+                                <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
                                     @if($otherUser->foto_profil)
-                                        <img src="{{ asset('storage/profile_photos/' . $otherUser->foto_profil) }}" class="w-full h-full object-cover">
+                                        <img src="{{ asset('storage/' . $otherUser->foto_profil) }}" class="w-full h-full object-cover">
                                     @else
-                                        <!-- Gradient placeholder like in the image -->
-                                        <div class="w-full h-full opacity-50 mix-blend-multiply"></div>
+                                        <div class="w-full h-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-sm uppercase">
+                                            {{ substr($otherUser->nama, 0, 1) }}
+                                        </div>
                                     @endif
                                 </div>
                             </div>
                             <div class="max-w-[75%] bubble-left px-6 py-4 relative">
-                                <p class="text-[14px] leading-relaxed">{{ $msg->body }}</p>
+                                @if($msg->image)
+                                    <div class="mb-2">
+                                        <img src="{{ asset('storage/' . $msg->image) }}" class="rounded-xl max-w-full w-64 object-cover shadow-sm border border-black/5" alt="Uploaded Image">
+                                    </div>
+                                @endif
+                                @if($msg->body)
+                                    <p class="text-[14px] leading-relaxed">{{ $msg->body }}</p>
+                                @endif
                                 <div class="flex justify-start items-center mt-2 text-[10px] text-gray-400">
                                     <span>{{ $msg->created_at->format('H:i') }}</span>
                                 </div>
@@ -231,13 +254,24 @@
         </div>
 
         <!-- Input Area -->
-        <div class="p-6 bg-white border-t border-gray-100">
+        <div class="p-4 bg-white border-t border-gray-100 flex flex-col">
+            <!-- Image Preview Area (Hidden by default) -->
+            <div id="image-preview-container" class="hidden mb-3 relative self-start group">
+                <img id="image-preview" src="" class="h-24 w-auto rounded-lg border border-gray-200 shadow-sm object-cover">
+                <button onclick="removeImage()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
             <div class="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-2 py-2 shadow-sm focus-within:ring-1 focus-within:ring-gray-300 focus-within:border-gray-300 transition-all">
-                <button class="flex-shrink-0 w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors ml-1">
+                <input type="file" id="image-input" accept="image/*" class="hidden" onchange="previewImage(this)">
+                <label for="image-input" class="cursor-pointer flex-shrink-0 w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors ml-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
-                </button>
+                </label>
                 
                 <div class="flex-1 relative">
                     <input type="text" id="message-input" placeholder="Type your message here..." 
@@ -261,7 +295,7 @@
     const messagesWrapper = document.getElementById('messages-wrapper');
     const otherUserId = {{ $otherUser->id }};
     const currentUserId = {{ Auth::id() }};
-    const otherUserFoto = "{{ $otherUser->foto_profil ? asset('storage/profile_photos/' . $otherUser->foto_profil) : '' }}";
+    const otherUserFoto = "{{ $otherUser->foto_profil ? asset('storage/' . $otherUser->foto_profil) : '' }}";
     
     // Auto scroll to bottom
     function scrollToBottom() {
@@ -270,6 +304,42 @@
     
     // Call on load
     scrollToBottom();
+
+    // Preview Image logic
+    function previewImage(input) {
+        const label = input.nextElementSibling;
+        const previewContainer = document.getElementById('image-preview-container');
+        const previewImg = document.getElementById('image-preview');
+
+        if (input.files && input.files[0]) {
+            label.classList.add('bg-amber-100', 'border-amber-300', 'text-amber-600');
+            label.classList.remove('text-gray-500', 'border-gray-200');
+            
+            // Render the preview image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewContainer.classList.remove('hidden');
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            removeImage();
+        }
+    }
+
+    function removeImage() {
+        const input = document.getElementById('image-input');
+        const label = input.nextElementSibling;
+        const previewContainer = document.getElementById('image-preview-container');
+        const previewImg = document.getElementById('image-preview');
+
+        input.value = '';
+        previewImg.src = '';
+        previewContainer.classList.add('hidden');
+
+        label.classList.remove('bg-amber-100', 'border-amber-300', 'text-amber-600');
+        label.classList.add('text-gray-500', 'border-gray-200');
+    }
 
     // Format time
     function formatTime(date) {
@@ -281,12 +351,22 @@
     }
 
     // Append my message to UI instantly
-    function appendMyMessage(text, id) {
+    function appendMyMessage(text, id, imagePath) {
         const timeStr = formatTime(new Date());
+        let imageHtml = '';
+        if (imagePath) {
+            imageHtml = `
+                <div class="mb-2">
+                    <img src="/storage/${imagePath}" class="rounded-xl max-w-full w-64 object-cover shadow-sm border border-black/5" alt="Uploaded Image">
+                </div>
+            `;
+        }
+        const textHtml = text ? `<p class="text-[14px] leading-relaxed">${text}</p>` : '';
         const html = `
             <div class="flex justify-end w-full group message-item" data-id="${id}">
                 <div class="max-w-[75%] bubble-right px-6 py-4 relative">
-                    <p class="text-[14px] leading-relaxed">${text}</p>
+                    ${imageHtml}
+                    ${textHtml}
                     <div class="flex justify-end items-center mt-2 gap-1 text-[10px] text-[#9a887a]">
                         <span>${timeStr}</span>
                     </div>
@@ -298,24 +378,35 @@
     }
 
     // Append other message to UI
-    function appendOtherMessage(text, id, timestamp) {
+    function appendOtherMessage(text, id, timestamp, imagePath) {
         const date = new Date(timestamp);
         const timeStr = formatTime(date);
         
-        let avatarHtml = `<div class="w-full h-full opacity-50 mix-blend-multiply"></div>`;
+        let avatarHtml = `<div class="w-full h-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-sm uppercase">{{ substr($otherUser->nama, 0, 1) }}</div>`;
         if(otherUserFoto) {
             avatarHtml = `<img src="${otherUserFoto}" class="w-full h-full object-cover">`;
         }
 
+        let imageHtml = '';
+        if (imagePath) {
+            imageHtml = `
+                <div class="mb-2">
+                    <img src="/storage/${imagePath}" class="rounded-xl max-w-full w-64 object-cover shadow-sm border border-black/5" alt="Uploaded Image">
+                </div>
+            `;
+        }
+        const textHtml = text ? `<p class="text-[14px] leading-relaxed">${text}</p>` : '';
+
         const html = `
             <div class="flex w-full group message-item" data-id="${id}">
                 <div class="flex-shrink-0 mr-3 mt-auto mb-1">
-                    <div class="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-tr from-green-400 to-amber-200">
+                    <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
                         ${avatarHtml}
                     </div>
                 </div>
                 <div class="max-w-[75%] bubble-left px-6 py-4 relative">
-                    <p class="text-[14px] leading-relaxed">${text}</p>
+                    ${imageHtml}
+                    ${textHtml}
                     <div class="flex justify-start items-center mt-2 text-[10px] text-gray-400">
                         <span>${timeStr}</span>
                     </div>
@@ -329,29 +420,51 @@
     // Send Message
     async function sendMessage() {
         const text = messageInput.value.trim();
-        if (!text) return;
+        const imageInput = document.getElementById('image-input');
+        const imageFile = imageInput.files[0];
+        
+        if (!text && !imageFile) return;
 
-        // Clear input early for UX
-        messageInput.value = '';
-        messageInput.focus();
+        const formData = new FormData();
+        if (text) formData.append('body', text);
+        if (imageFile) formData.append('image', imageFile);
+
+        // Disable input while sending
+        messageInput.disabled = true;
+        btnSend.disabled = true;
 
         try {
             const response = await fetch(`/chat/${otherUserId}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ body: text })
+                body: formData
             });
             const data = await response.json();
             
             if (data.success) {
-                appendMyMessage(data.message.body, data.message.id);
+                // Clear input only on success
+                messageInput.value = '';
+                removeImage();
+                appendMyMessage(data.message.body, data.message.id, data.message.image);
+            } else if (data.errors) {
+                let errorMsg = '';
+                for (let key in data.errors) {
+                    errorMsg += data.errors[key].join('\n') + '\n';
+                }
+                alert("Gagal mengirim pesan:\n" + errorMsg);
+            } else if (data.message) {
+                alert("Gagal: " + data.message);
             }
         } catch (error) {
             console.error('Error sending message:', error);
+            alert("Gagal mengirim pesan. Silakan coba lagi.");
+        } finally {
+            messageInput.disabled = false;
+            btnSend.disabled = false;
+            messageInput.focus();
         }
     }
 
@@ -383,7 +496,7 @@
                 let hasNewOtherMsg = false;
                 data.messages.forEach(msg => {
                     if (msg.sender_id != currentUserId) {
-                        appendOtherMessage(msg.body, msg.id, msg.created_at);
+                        appendOtherMessage(msg.body, msg.id, msg.created_at, msg.image);
                         hasNewOtherMsg = true;
                     }
                 });

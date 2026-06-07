@@ -32,4 +32,11 @@ class Property extends Model
     {
         return $this->hasMany(PropertyImage::class);
     }
+    
+    // Semua penawaran yang masuk ke properti 
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
+
 }

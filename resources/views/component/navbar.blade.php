@@ -35,6 +35,41 @@
                         0
                     </span>
                 </a>
+                {{-- Penawaran icon dengan badge --}}
+                @php
+                    $unreadOffersCount = \App\Models\Offer::where('seller_id', Auth::id())
+                        ->where('is_read_by_seller', false)
+                        ->count();
+                @endphp
+                <a href="{{ route('offers.incoming') }}"
+                class="relative p-2 rounded-lg text-gray-600 hover:text-amber-700 hover:bg-amber-50 transition-all duration-200"
+                title="Penawaran Masuk">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185z" />
+                    </svg>
+                    @if($unreadOffersCount > 0)
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold min-w-[16px] h-4 px-0.5 rounded-full flex items-center justify-center">
+                        {{ $unreadOffersCount > 9 ? '9+' : $unreadOffersCount }}
+                    </span>
+                    @endif
+                </a>
+
+                {{-- Chat icon with badge --}}
+                @php
+                    $unreadChatsCount = \App\Models\Message::whereHas('conversation', function($q) { 
+                        $q->where('user_one_id', Auth::id())->orWhere('user_two_id', Auth::id()); 
+                    })->where('sender_id', '!=', Auth::id())->where('is_read', false)->count();
+                @endphp
+                <a href="{{ url('/chat') }}"
+                   class="relative p-2 rounded-lg text-gray-600 hover:text-amber-700 hover:bg-amber-50 transition-all duration-200"
+                   title="Pesan">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                    </svg>
+                    @if($unreadChatsCount > 0)
+                    <span class="absolute top-1.5 right-1 w-2.5 h-2.5 bg-green-500 border border-white rounded-full"></span>
+                    @endif
+                </a>
 
                 {{-- Profile --}}
                 <a href="/profile" class="bg-[#3d2b1f] text-white px-5 py-2 rounded-lg hover:bg-[#2a1d14] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 active:scale-95 flex items-center gap-2">

@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Offercontroller;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -83,4 +84,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat/{user}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/chat/{user}', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat/{user}/messages', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+
+    // Fitur Penawaran
+    Route::post('/offers', [Offercontroller::class, 'store'])->name('offers.store');
+    Route::get('/penawaran-masuk', [Offercontroller::class, 'incomingOffers'])->name('offers.incoming');
+    Route::get('/penawaran-diajukan', [Offercontroller::class, 'myOffers'])->name('offers.mine');
+    Route::post('/offers/{id}/respond', [Offercontroller::class, 'respond'])->name('offers.respond');
+
+    // Open Profile & Ulasan
+    Route::get('/user/{id}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/user/{id}/reviews', [ProfileController::class, 'storeReview'])->name('profile.reviews.store');
+
 });

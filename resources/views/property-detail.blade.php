@@ -93,30 +93,36 @@
     {{-- Profile and Chat Button Row --}}
     <div class="flex flex-col md:flex-row justify-between items-center mb-10">
         {{-- Profile --}}
-        <div class="flex items-center gap-4">
-            <div class="w-14 h-14 bg-[#e5e5e5] rounded-full flex items-center justify-center overflow-hidden">
+        <a href="{{ route('profile.show', $property->user_id) }}" class="flex items-center gap-4 hover:bg-gray-50 p-2 rounded-xl transition-colors cursor-pointer border border-transparent hover:border-gray-100">
+            <div class="w-14 h-14 bg-[#e5e5e5] rounded-full flex items-center justify-center overflow-hidden shrink-0">
                 @if($property->user && $property->user->foto_profil)
-                    <img src="{{ asset('storage/profile_photos/' . $property->user->foto_profil) }}" class="w-full h-full object-cover">
+                    <img src="{{ asset('storage/' . $property->user->foto_profil) }}" class="w-full h-full object-cover">
                 @else
-                    <div class="w-full h-full bg-[#d6d6d6] flex items-center justify-center text-gray-600 font-bold text-xl">
-                        {{ $property->user ? strtoupper(substr($property->user->nama, 0, 1)) : 'U' }}
+                    <div class="w-full h-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-xl uppercase">
+                        {{ $property->user ? substr($property->user->nama, 0, 1) : 'U' }}
                     </div>
                 @endif
             </div>
             <div>
-                <div class="font-bold text-gray-900 text-[15px]">{{ $property->user ? $property->user->nama : 'User' }}</div>
+                <div class="font-bold text-gray-900 text-[15px] group-hover:text-amber-700 transition-colors">{{ $property->user ? $property->user->nama : 'User' }}</div>
                 <div class="text-xs text-gray-500">Penjual</div>
             </div>
-        </div>
+        </a>
         
-        {{-- Chat Button --}}
-        <div class="mt-4 md:mt-0">
+        {{-- Action Buttons --}}
+        <div class="mt-4 md:mt-0 flex gap-3">
             @auth
                 @if(Auth::id() !== $property->user_id)
+                {{-- Tombol Ajukan Penawaran --}}
+                <button onclick="openOfferModal()"
+                    class="flex items-center gap-2 px-5 py-2 text-sm rounded-md font-semibold border-2 border-[#3d2b1f] text-[#3d2b1f] hover:bg-[#3d2b1f] hover:text-white transition-all duration-200">
+                    🏷️ Ajukan Penawaran
+                </button>
+                {{-- Tombol Chat --}}
                 <a href="{{ route('chat.show', $property->user_id) }}" class="btn-chat px-6 py-2 text-sm rounded-md shadow-sm hover:no-underline">
                     Chat Penjual
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-1">
-                      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.022 4.573 2.706 6.092.393.354.906.518 1.431.572.241.025.485.013.72-.036z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.022 4.573 2.706 6.092.393.354.906.518 1.431.572.241.025.485.013.72-.036z" clip-rule="evenodd" />
                     </svg>
                 </a>
                 @endif
@@ -124,7 +130,7 @@
                 <button onclick="openLogin()" class="btn-chat px-6 py-2 text-sm rounded-md shadow-sm">
                     Chat Penjual
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-1">
-                      <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.022 4.573 2.706 6.092.393.354.906.518 1.431.572.241.025.485.013.72-.036z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.022 4.573 2.706 6.092.393.354.906.518 1.431.572.241.025.485.013.72-.036z" clip-rule="evenodd" />
                     </svg>
                 </button>
             @endauth
@@ -183,6 +189,106 @@
     </div>
     
 </div>
+{{-- ===== MODAL PENAWARAN ===== --}}
+<div id="offerModal" class="fixed inset-0 z-[200] hidden">
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeOfferModal()"></div>
+    <div class="fixed inset-0 z-[201] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+
+            <div class="flex justify-between items-center mb-5">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">Ajukan Penawaran</h3>
+                    <p class="text-xs text-gray-400 mt-1">{{ $property->title }}</p>
+                </div>
+                <button onclick="closeOfferModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            {{-- Harga Listing --}}
+            <div class="bg-gray-50 rounded-xl p-4 mb-5">
+                <p class="text-xs text-gray-500 mb-1">Harga Listing</p>
+                <p class="text-2xl font-extrabold text-gray-900">Rp {{ number_format($property->price, 0, ',', '.') }}</p>
+            </div>
+
+            {{-- Flash Messages --}}
+            @if(session('error'))
+                <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            {{-- Form --}}
+            <form action="{{ route('offers.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="property_id" value="{{ $property->id }}">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Harga Tawarmu <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex items-center border-2 border-gray-200 rounded-xl px-4 focus-within:border-[#3d2b1f] transition-colors">
+                        <span class="text-gray-500 font-medium mr-2 shrink-0">Rp</span>
+                        <input type="number" name="offered_price" id="offeredPriceInput"
+                            placeholder="0" min="1" required
+                            class="flex-1 py-3 outline-none text-gray-900 font-bold text-lg bg-transparent">
+                    </div>
+                    <p id="priceComparison" class="text-xs mt-1.5 text-gray-400"></p>
+                </div>
+
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Pesan untuk Penjual <span class="text-gray-400 font-normal">(opsional)</span>
+                    </label>
+                    <textarea name="message" rows="3" maxlength="500"
+                        placeholder="Contoh: Saya tertarik, apakah harga bisa dinegosiasikan?"
+                        class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 outline-none focus:border-[#3d2b1f] transition-colors resize-none"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-[#3d2b1f] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#2a1d14] transition-colors active:scale-[0.98]">
+                    Kirim Penawaran 🏷️
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const listingPrice = {{ $property->price }};
+
+    function openOfferModal()  { document.getElementById('offerModal').classList.remove('hidden'); }
+    function closeOfferModal() { document.getElementById('offerModal').classList.add('hidden'); }
+
+    document.getElementById('offeredPriceInput')?.addEventListener('input', function() {
+        const val  = parseInt(this.value) || 0;
+        const diff = val - listingPrice;
+        const pct  = listingPrice > 0 ? Math.abs((diff / listingPrice) * 100).toFixed(1) : 0;
+        const el   = document.getElementById('priceComparison');
+        if (val <= 0) { el.textContent = ''; return; }
+        if (diff < 0) {
+            el.textContent = `Lebih rendah ${pct}% dari harga listing`;
+            el.className = 'text-xs mt-1.5 text-amber-600 font-medium';
+        } else if (diff > 0) {
+            el.textContent = `Lebih tinggi ${pct}% dari harga listing`;
+            el.className = 'text-xs mt-1.5 text-green-600 font-medium';
+        } else {
+            el.textContent = 'Sama dengan harga listing';
+            el.className = 'text-xs mt-1.5 text-gray-500';
+        }
+    });
+
+    @if(session('error') || session('success'))
+        openOfferModal();
+    @endif
+</script>
 
 {{-- Gallery Modal --}}
 <div id="galleryModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">

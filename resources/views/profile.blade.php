@@ -21,14 +21,16 @@
 
 
 
-                <a href="{{ url('/chat') }}"
-                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
-                    <span class="font-medium">Chat</span>
-                </a>
+
 
                 <a href="{{ url('/penawaran-saya') }}"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
-                    <span class="font-medium">Penawaran Saya</span>
+                    <span class="font-medium">Iklan Saya</span>
+                </a>
+
+                <a href="{{ route('offers.mine') }}"
+                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eee] transition">
+                    <span class="font-medium">Penawaran Diajukan</span>
                 </a>
 
                 <hr class="my-4">
@@ -74,8 +76,8 @@
                         <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto Profil" 
                             class="w-28 h-28 rounded-full object-cover shadow-inner border-4 border-[#ead9ca]">
                     @else
-                        <div class="w-28 h-28 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] text-5xl font-bold overflow-hidden shadow-inner">
-                            {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                        <div class="w-28 h-28 rounded-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] text-5xl font-bold overflow-hidden shadow-inner border-4 border-[#ead9ca] uppercase">
+                            {{ substr(Auth::user()->username, 0, 1) }}
                         </div>
                     @endif
 
@@ -129,7 +131,7 @@
                                     class="bg-gray-200 text-gray-700 px-5 py-2 rounded-lg font-medium hover:bg-gray-300 transition">
                                     Batal
                                 </button>
-                                <button type="submit"
+                                <button type="submit" id="btn-save"
                                     class="bg-[#3d2b1f] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#2a1d14] transition shadow-md">
                                     Simpan
                                 </button>
@@ -168,8 +170,9 @@
                                 
                                 <input type="text" id="input-notelp" name="no_telp" 
                                     value="{{ (Auth::user()->no_telp == '-') ? '' : Auth::user()->no_telp }}" 
-                                    placeholder="08xxxxxxxxxx" 
+                                    placeholder="628xxxxxxxxxx" 
                                     class="hidden w-full border-b-2 border-[#b79a85] outline-none py-1 bg-transparent focus:border-[#3d2b1f] transition">
+                                <p id="error-notelp" class="text-xs text-red-500 mt-1 hidden">Format nomor telepon tidak valid.</p>
                             </div>
                         </div>
 
@@ -224,47 +227,15 @@
                             Properti yang Anda simpan di favorit
                         </p>
 
-                        <button
-                            class="w-full bg-[#8b6c56] text-white py-3 rounded-xl">
+                        <a href="{{ url('/saved') }}"
+                            class="w-full block text-center bg-[#8b6c56] text-white py-3 rounded-xl">
                             Lihat Semua
-                        </button>
-
-                    </div>
-
-
-                    {{-- CARD --}}
-                    <div class="border rounded-2xl p-6">
-
-                        <div class="flex justify-between items-start mb-4">
-
-                            <div class="flex gap-4">
-                                <div class="bg-[#ead9ca] p-4 rounded-xl">
-                                    💬
-                                </div>
-
-                                <div>
-                                    <h3 class="font-bold text-xl">
-                                        Riwayat Chat
-                                    </h3>
-
-                                    <p class="text-4xl font-bold">12</p>
-                                </div>
-                            </div>
-
-                            <span>›</span>
-
-                        </div>
-
-                        <p class="text-[#9d8876] mb-6">
-                            Percakapan aktif dengan penjual rumah
-                        </p>
-
-                        <a href="{{ url('/chat') }}"
-                            class="w-full block text-center bg-[#6f5644] text-white py-3 rounded-xl">
-                            Lihat Chat
                         </a>
 
                     </div>
+
+
+
 
 
                     {{-- CARD --}}
@@ -279,10 +250,10 @@
 
                                 <div>
                                     <h3 class="font-bold text-xl">
-                                        Penawaran Saya
+                                        Iklan Saya
                                     </h3>
 
-                                    <p class="text-4xl font-bold">12</p>
+                                    <p class="text-4xl font-bold">{{ \App\Models\Property::where('user_id', Auth::id())->count() }}</p>
                                 </div>
                             </div>
 
@@ -291,13 +262,47 @@
                         </div>
 
                         <p class="text-[#9d8876] mb-6">
-                            Penawaran harga yang sedang berjalan
+                            Iklan properti yang Anda pasang
                         </p>
 
-                        <button
-                            class="w-full bg-[#c29d7f] text-white py-3 rounded-xl">
+                        <a href="{{ url('/penawaran-saya') }}"
+                            class="w-full block text-center bg-[#c29d7f] text-white py-3 rounded-xl">
+                            Lihat Iklan
+                        </a>
+
+                    </div>
+
+                    {{-- CARD PENAWARAN DIAJUKAN --}}
+                    <div class="border rounded-2xl p-6">
+
+                        <div class="flex justify-between items-start mb-4">
+
+                            <div class="flex gap-4">
+                                <div class="bg-[#ead9ca] p-4 rounded-xl">
+                                    🤝
+                                </div>
+
+                                <div>
+                                    <h3 class="font-bold text-xl">
+                                        Penawaran Diajukan
+                                    </h3>
+
+                                    <p class="text-4xl font-bold">{{ \App\Models\Offer::where('buyer_id', Auth::id())->count() }}</p>
+                                </div>
+                            </div>
+
+                            <span>›</span>
+
+                        </div>
+
+                        <p class="text-[#9d8876] mb-6">
+                            Riwayat harga yang Anda ajukan
+                        </p>
+
+                        <a href="{{ route('offers.mine') }}"
+                            class="w-full block text-center bg-[#3d2b1f] text-white py-3 rounded-xl hover:bg-[#2a1d14] transition">
                             Lihat Penawaran
-                        </button>
+                        </a>
 
                     </div>
 
@@ -342,6 +347,50 @@
         document.getElementById('btn-save-cancel').classList.add('hidden');
         document.getElementById('btn-edit').classList.remove('hidden');
     }
+
+    // Validasi nomor telepon sebelum disubmit
+    document.getElementById('form-update-profile').addEventListener('submit', function(e) {
+        let val = document.getElementById('input-notelp').value;
+        const errorElem = document.getElementById('error-notelp');
+        
+        // Cek jika kosong maka biarkan (karena nullable)
+        if (val === '') {
+            errorElem.classList.add('hidden');
+            return;
+        }
+
+        // Cek format awal 628 dan panjang karakter min 11 maks 15 (termasuk 628)
+        const regex = /^628[0-9]{8,12}$/;
+        
+        if (!regex.test(val)) {
+            e.preventDefault(); // cegah submit
+            errorElem.textContent = "Nomor harus diawali 628 dan panjang 11-15 digit.";
+            errorElem.classList.remove('hidden');
+            document.getElementById('input-notelp').classList.add('border-red-500');
+        } else {
+            errorElem.classList.add('hidden');
+            document.getElementById('input-notelp').classList.remove('border-red-500');
+        }
+    });
+
+    // Format nomor telepon otomatis jadi 62...
+    document.getElementById('input-notelp').addEventListener('input', function(e) {
+        let val = this.value;
+        
+        // Hapus tanda + atau karakter selain angka
+        val = val.replace(/[^0-9]/g, '');
+        
+        // Jika dimulai dengan 0, ubah jadi 62
+        if (val.startsWith('0')) {
+            val = '62' + val.substring(1);
+        }
+        
+        this.value = val;
+        
+        // Sembunyikan error saat sedang mengetik
+        document.getElementById('error-notelp').classList.add('hidden');
+        document.getElementById('input-notelp').classList.remove('border-red-500');
+    });
 </script>
 
 <script>
@@ -349,9 +398,10 @@
         const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
         const userId = {{ auth()->check() ? auth()->id() : 'null' }};
         const SAVE_KEY = isLoggedIn ? 'propcentral_saved_' + userId : 'propcentral_saved';
-        
+
         const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '[]');
         const countElem = document.getElementById('saved-count');
+
         if (countElem) countElem.textContent = saved.length;
     });
 </script>

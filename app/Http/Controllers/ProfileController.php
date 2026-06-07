@@ -14,7 +14,7 @@ class ProfileController extends Controller
         // validation input user
         $request->validate([
             'username' => 'required|string|max:255',
-            'no_telp' => 'nullable|string|max:20|unique:users,no_telp,' . $user->id,
+            'no_telp' => ['nullable', 'string', 'regex:/^628[0-9]{8,12}$/', 'unique:users,no_telp,' . $user->id],
         ]);
 
         // repleace new data from user
@@ -51,5 +51,34 @@ class ProfileController extends Controller
         }
 
         return back()->with('success', 'Foto profil berhasil diupdate!');
+    }
+
+    public function show($id)
+    {
+        $user = \App\Models\User::with(['properties.images', 'reviews.reviewer'])->findOrFail($id);
+        
+        return view('open-profile', compact('user'));
+    }
+
+    public function storeReview(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        $user = \App\Models\User::findOrFail($id);
+
+        if ($user->id === Auth::id()) {
+            return back()->with('error', 'Anda tidak bisa mengulas diri sendiri.');
+        }
+
+        \App\Models\UserReview::create([
+            'user_id' => $user->id,
+            'reviewer_id' => Auth::id(),
+            'comment' => $request->comment,
+            'rating' => null, // Optional, we don't have UI for rating yet based on mockup
+        ]);
+
+        return back()->with('success', 'Ulasan berhasil ditambahkan!');
     }
 }

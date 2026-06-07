@@ -61,4 +61,28 @@ class User extends Authenticatable
         return Conversation::where('user_one_id', $this->id)
             ->orWhere('user_two_id', $this->id);
     }
+
+    // Penawaran yang diajukan user (sebagai pembeli)
+    public function offersAsBuyer()
+    {
+        return $this->hasMany(Offer::class, 'buyer_id');
+    }
+
+    // Penawaran yang masuk ke user (sebagai penjual)
+    public function offersAsSeller()
+    {
+        return $this->hasMany(Offer::class, 'seller_id');
+    }
+
+    // Ulasan yang diterima
+    public function reviews()
+    {
+        return $this->hasMany(UserReview::class, 'user_id');
+    }
+
+    // Ulasan yang diberikan
+    public function givenReviews()
+    {
+        return $this->hasMany(UserReview::class, 'reviewer_id');
+    }
 }

@@ -30,6 +30,10 @@
         if (isSaved(id)) {
             saved = saved.filter(p => p.id !== id);
         } else {
+            if (saved.length >= 20) {
+                alert('Batas maksimum 20 properti tersimpan telah tercapai.');
+                return;
+            }
             saved.push(prop);
         }
         localStorage.setItem(SAVE_KEY, JSON.stringify(saved));

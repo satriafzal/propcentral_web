@@ -88,6 +88,26 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
+        // Update Saved Badge globally
+        const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+        const userId = {{ auth()->check() ? auth()->id() : 'null' }};
+        const SAVE_KEY = isLoggedIn ? 'propcentral_saved_' + userId : 'propcentral_saved';
+        
+        function updateSavedBadge() {
+            let savedProps = JSON.parse(localStorage.getItem(SAVE_KEY) || '[]');
+            const badge = document.getElementById('savedBadge');
+            if (badge) {
+                if(savedProps.length > 0) {
+                    badge.classList.remove('hidden');
+                    badge.innerText = savedProps.length;
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        }
+        updateSavedBadge();
+        window.updateSavedBadge = updateSavedBadge;
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {

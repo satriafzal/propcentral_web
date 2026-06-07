@@ -25,7 +25,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'no_telp' => '-'.time(), 
             'alamat' => '-',
-            'foto_profil' => 'default.png',
+            'foto_profil' => null,
         ]);
 
         Auth::login($user);

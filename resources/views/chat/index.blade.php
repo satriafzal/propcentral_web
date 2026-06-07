@@ -64,9 +64,11 @@
                         <div class="relative">
                             <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
                                 @if($otherUser->foto_profil)
-                                    <img src="{{ asset('storage/profile_photos/' . $otherUser->foto_profil) }}" class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/' . $otherUser->foto_profil) }}" class="w-full h-full object-cover">
                                 @else
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($otherUser->nama) }}&background=EAD9CA&color=4B372D" class="w-full h-full object-cover">
+                                    <div class="w-full h-full bg-[#ead9ca] flex items-center justify-center text-[#7b5d4a] font-bold text-xl uppercase">
+                                        {{ substr($otherUser->nama, 0, 1) }}
+                                    </div>
                                 @endif
                             </div>
                             <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
@@ -79,7 +81,16 @@
                             </div>
                             <div class="flex items-center justify-between mt-0.5">
                                 <p class="text-[13px] text-gray-500 truncate {{ $unreadCount > 0 ? 'font-medium text-gray-900' : '' }}">
-                                    {{ $lastMessage ? $lastMessage->body : 'Belum ada pesan' }}
+                                    @if($lastMessage)
+                                        @if($lastMessage->image)
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 inline-block mr-0.5 relative -top-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+                                            {{ $lastMessage->body ? $lastMessage->body : 'Lampiran' }}
+                                        @else
+                                            {{ $lastMessage->body }}
+                                        @endif
+                                    @else
+                                        Belum ada pesan
+                                    @endif
                                 </p>
                                 @if($unreadCount > 0)
                                     <span class="flex items-center justify-center w-5 h-5 ml-2 text-[10px] font-bold text-white bg-black rounded-full flex-shrink-0">
