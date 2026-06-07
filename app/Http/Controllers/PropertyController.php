@@ -13,7 +13,7 @@ class PropertyController extends Controller
     public function index(\Illuminate\Http\Request $request)
     {
         // Get all properties with their images and owner
-        $query = Property::with(['images', 'user'])->latest();
+        $query = Property::with(['images', 'user']);
 
         // check if there is a search query for city, if yes, filter the properties by city
         if ($request->filled('city')) {
@@ -25,11 +25,38 @@ class PropertyController extends Controller
             $query->where('type', $request->type);
         }
 
+        // check if there is a search query for price range, if yes, filter the properties by price range
+        if ($request->filled('price')) {
+            $priceRange = $request->price;
+
+            // convert teks dropwdown from filtering to integer for db
+            if ($priceRange === '< Rp 500 Juta') {
+                $query->where('price', '<', 500000000);
+            } else if ($priceRange === 'Rp 500 Juta - Rp 1 M') {
+                $query->whereBetween('price', [500000000, 1000000000]);
+            } else if ($priceRange === '> Rp 1 M') {
+                $query->where('price', '>', 1000000000);
+            }
+        }
+
+        // logic for sorting urutkan
+        if ($request->filled('sort')) {
+            if($request->sort === 'termurah') {
+                $query->orderBy('price', 'asc');
+            } else if ($request->sort === 'termahal') {
+                $query->orderBy('price', 'desc');
+            } else {
+                $query->latest();
+            }
+        } else {
+            $query->latest();
+        }
+
         // get data after filtering and sorting update
         $properties = $query->get();
 
         // get distinct cities from properties for filter options in the view
-        $cities = Property::select('city')->distinct()->whereNotNull('city')->pluck('city');
+        $cities = \App\Models\Property::select('city')->distinct()->whereNotNull('city')->pluck('city');
 
         return view('property', compact('properties', 'cities')); 
     }

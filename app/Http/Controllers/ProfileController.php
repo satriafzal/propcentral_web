@@ -52,4 +52,19 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Foto profil berhasil diupdate!');
     }
+
+    public function destroy(\Illuminate\Http\Request $request) {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        \Illuminate\Support\Facades\Auth::logout();
+
+        // using softdelete
+        $user->delete();
+
+        // clear session for security
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Akun berhasil dihapus'], 200);
+    }
 }
