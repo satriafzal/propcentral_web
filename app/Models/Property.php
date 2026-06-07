@@ -19,6 +19,7 @@ class Property extends Model
         'garage',
         'certificate',
         'address',
+        'city',
         'latitude',
         'longitude',
     ];

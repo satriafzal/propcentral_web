@@ -75,9 +75,10 @@ Route::middleware('auth')->group(function () {
 
     // for update profile user
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
     // for update profile photo user
     Route::put('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.updatePhoto');
+    // for delete account user
+    Route::delete('/account/delete', [ProfileController::class, 'destroy'])->name('account.destroy');
 
     // Chat routes
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('garage');
             $table->string('certificate');
             $table->text('address');
+            $table->string('city');
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamps();
