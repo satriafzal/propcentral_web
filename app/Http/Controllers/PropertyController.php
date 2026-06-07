@@ -20,6 +20,11 @@ class PropertyController extends Controller
             $query->where('city', 'like', '%' . $request->city . '%');
         }
 
+        // check if there is a search query for type, if yes, filter the properties by type
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
         // get data after filtering and sorting update
         $properties = $query->get();
 
