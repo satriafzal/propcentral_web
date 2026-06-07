@@ -267,6 +267,12 @@
                         @csrf
                     </form>
                 </li>
+                <li>
+                    <a href="/profile" class="text-gray-500 hover:text-[#3b2a22] flex items-center text-sm font-medium mb-4 transition-colors">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Kembali ke Profil
+                    </a>
+                </li>
             </ul>
         </aside>
 
@@ -541,18 +547,42 @@
 
         function confirmDeleteAccount() {
             Swal.fire({
-                title: 'Hapus Akun?',
-                text: 'Tindakan ini permanen dan tidak dapat dibatalkan. Semua data Anda akan dihapus.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc2626',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Ya, Hapus Akun',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // TODO: submit form hapus akun ke backend
-                    Swal.fire('Akun Dihapus', 'Akun Anda telah berhasil dihapus.', 'success');
+        title: 'Hapus Akun?',
+        text: 'Tindakan ini permanen dan tidak dapat dibatalkan. Semua data Anda akan dihapus.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, Hapus Akun',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+                // Eksekusi hapus akun ke backend pakai Fetch API
+                fetch("{{ route('account.destroy') }}", {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if(response.ok) {
+                        // Kalau berhasil, tampilin Swal sukses
+                        Swal.fire('Akun Dihapus', 'Akun Anda telah berhasil dihapus.', 'success')
+                        .then(() => {
+                            // Redirect ke halaman beranda setelah klik OK
+                            window.location.href = "{{ url('/') }}";
+                        });
+                    } else {
+                        // Kalau ada error (misal session expired)
+                        Swal.fire('Gagal!', 'Terjadi kesalahan saat menghapus akun.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Gagal!', 'Terjadi kesalahan pada server.', 'error');
+                });
                 }
             });
         }

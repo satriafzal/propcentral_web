@@ -121,16 +121,20 @@
         {{-- List Header --}}
         <div class="flex justify-between items-center mb-8">
             <div class="text-sm text-gray-500">
-                Menampilkan <span class="font-bold text-gray-900">24 Properti</span>
+                Menampilkan <span class="font-bold text-gray-900">{{ $properties->count() }} Properti</span>
             </div>
-            <div class="flex items-center gap-2 text-sm">
+            <form action="{{ url('/property') }}" method="GET" class="flex items-center gap-2 text-sm">
+                @if(request('city')) <input type="hidden" name="city" value="{{ request('city') }}"> @endif
+                @if(request('type')) <input type="hidden" name="type" value="{{ request('type') }}"> @endif
+                @if(request('price')) <input type="hidden" name="price" value="{{ request('price') }}"> @endif
+
                 <span class="text-gray-500">Urutkan:</span>
-                <select class="bg-white border border-gray-200 rounded-md px-3 py-1.5 text-gray-700 outline-none cursor-pointer hover:border-gray-300">
-                    <option>Terbaru</option>
-                    <option>Harga (Rendah - Tinggi)</option>
-                    <option>Harga (Tinggi - Rendah)</option>
+                <select name="sort" onchange="this.form.submit()" class="bg-white border border-gray-200 rounded-md px-3 py-1.5 text-gray-700 outline-none cursor-pointer hover:border-gray-300">
+                    <option value="terbaru" {{ request('sort') == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                    <option value="termurah" {{ request('sort') == 'termurah' ? 'selected' : '' }}>Harga (Rendah - Tinggi)</option>
+                    <option value="termahal" {{ request('sort') == 'termahal' ? 'selected' : '' }}>Harga (Tinggi - Rendah)</option>
                 </select>
-            </div>
+            </form>
         </div>
 
         {{-- Cards --}}
