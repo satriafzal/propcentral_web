@@ -198,6 +198,74 @@
         .footer-links { display: flex; gap: 1.5rem; }
         .footer-links a { font-size: 0.85rem; color: #6b7280; text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: #111827; }
+
+
+        /* =========================================
+           RESPONSIVE MOBILE STYLING (BARU DITAMBAHKAN)
+           ========================================= */
+        @media (max-width: 768px) {
+            .topbar { 
+                padding: 0 1.25rem; 
+            }
+            .page-body { 
+                flex-direction: column; 
+            }
+            /* Ubah Sidebar jadi menu scroll ke samping di HP */
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+                padding: 1rem 1rem 0 1rem;
+                position: sticky;
+                top: 60px; /* Nempel di bawah topbar */
+                z-index: 40;
+            }
+            .sidebar-title, .sidebar-sub { 
+                display: none; /* Sembunyiin judul biar hemat space layar HP */
+            }
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+                gap: 0.5rem;
+                padding-bottom: 1rem;
+                /* Hilangkan scrollbar bawah tapi tetep bisa digeser */
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .sidebar-menu::-webkit-scrollbar { 
+                display: none; 
+            }
+            .sidebar-menu li {
+                margin: 0 !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            .sidebar-menu a {
+                padding: 0.5rem 1rem;
+                white-space: nowrap; /* Teks ga akan turun ke baris baru */
+            }
+            .main-content { 
+                padding: 1.5rem 1.25rem; 
+            }
+            .support-cards { 
+                grid-template-columns: 1fr; /* Jadi 1 kolom bertumpuk */
+            }
+            .danger-card { 
+                padding: 1.5rem; 
+            }
+            .settings-footer { 
+                flex-direction: column; 
+                gap: 1rem; 
+                justify-content: center; 
+                text-align: center;
+            }
+            .footer-links { 
+                flex-wrap: wrap; 
+                justify-content: center; 
+                gap: 1rem; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -283,8 +351,6 @@
             <div id="panel-bantuan" class="panel active">
                 <h1 class="page-title">Pusat Bantuan</h1>
                 <p class="page-desc">Temukan jawaban atas pertanyaan Anda atau hubungi tim dukungan kami yang siap membantu.</p>
-
-
 
                 <div class="section-label">Pertanyaan Umum</div>
 

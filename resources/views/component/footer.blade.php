@@ -1,36 +1,40 @@
 @include('auth.login')
-<footer class="bg-[#d2b8a3] mt-20 p-10">
-    <div class="grid grid-cols-4 gap-10">
 
-        <div>
+{{-- Perubahan: px-6 py-10 di HP biar ga terlalu lebar, p-10 di laptop --}}
+<footer class="bg-[#d2b8a3] mt-20 px-6 py-10 md:p-10">
+    
+    {{-- Perubahan: grid-cols-1 untuk HP, sm:2 untuk tablet, md:4 untuk laptop --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+
+        <div class="mb-4 md:mb-0">
             <h1 class="font-bold text-lg mb-2">PropCentral</h1>
-            <p>Bringing you closer to your dream home.</p>
+            <p class="text-sm md:text-base">Bringing you closer to your dream home.</p>
         </div>
 
         <div>
             <h2 class="font-semibold">About</h2>
-            <ul class="text-sm mt-2 space-y-1">
-                <li>Our Story</li>
-                <li>Careers</li>
-                <li>Team</li>
+            <ul class="text-sm mt-2 space-y-2 md:space-y-1">
+                <li><a href="#" class="hover:text-amber-800 transition-colors">Our Story</a></li>
+                <li><a href="#" class="hover:text-amber-800 transition-colors">Careers</a></li>
+                <li><a href="#" class="hover:text-amber-800 transition-colors">Team</a></li>
             </ul>
         </div>
 
         <div>
             <h2 class="font-semibold">Support</h2>
-            <ul class="text-sm mt-2 space-y-1">
-                <li>FAQ</li>
-                <li>Contact</li>
-                <li>Help Center</li>
+            <ul class="text-sm mt-2 space-y-2 md:space-y-1">
+                <li><a href="#" class="hover:text-amber-800 transition-colors">FAQ</a></li>
+                <li><a href="#" class="hover:text-amber-800 transition-colors">Contact</a></li>
+                <li><a href="#" class="hover:text-amber-800 transition-colors">Help Center</a></li>
             </ul>
         </div>
 
         <div>
             <h2 class="font-semibold">Social</h2>
-            <ul class="text-sm mt-2 space-y-1">
-                <li>Instagram</li>
-                <li>Facebook</li>
-                <li>Twitter</li>
+            <ul class="text-sm mt-2 space-y-2 md:space-y-1">
+                <li><a href="#" class="hover:text-amber-800 transition-colors">Instagram</a></li>
+                <li><a href="#" class="hover:text-amber-800 transition-colors">Facebook</a></li>
+                <li><a href="#" class="hover:text-amber-800 transition-colors">Twitter</a></li>
             </ul>
         </div>
 
@@ -135,14 +139,6 @@
             </form>
         </div>
     </div>
-
-    <button onclick="toggleChat()" class="w-14 h-14 bg-[#121212] hover:bg-[#1a1a1a] rounded-full shadow-2xl flex items-center justify-center text-blue-400 transition transform hover:scale-105 active:scale-95 ml-auto border-2 border-gray-600">
-        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 2a1 1 0 011 1v1h3a1 1 0 011 1v4a3 3 0 01-3 3H8a3 3 0 01-3-3V5a1 1 0 011-1h3V3a1 1 0 011-1zm1 4H9V5h2v1zM6 8a1 1 0 011-1h6a1 1 0 011 1v2H6V8zm0 5a1 1 0 001 1h6a1 1 0 001-1v-1H6v1z"/>
-            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0 1 1 0 01-2 0z" opacity=".2"/>
-        </svg>
-    </button>
-</div>
 
     <button onclick="toggleChat()" class="w-14 h-14 bg-[#121212] hover:bg-[#1a1a1a] rounded-full shadow-2xl flex items-center justify-center text-blue-400 transition transform hover:scale-105 active:scale-95 ml-auto border-2 border-gray-600">
         <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
