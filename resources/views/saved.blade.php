@@ -9,8 +9,34 @@
     const userId = {{ auth()->check() ? auth()->id() : 'null' }};
     const SAVE_KEY = isLoggedIn ? 'propcentral_saved_' + userId : 'propcentral_saved';
 
+    const dbProps = {!! isset($properties) ? $properties->map(function($prop) {
+        return [
+            'id' => (string) $prop->id,
+            'img' => $prop->images->count() > 0 ? asset('storage/' . $prop->images->first()->image_path) : null,
+            'badge' => 'Dijual',
+            'price' => 'Rp ' . number_format($prop->price, 0, ',', '.'),
+            'title' => $prop->title,
+            'loc' => $prop->address,
+            'specs' => $prop->bedroom . ' K. Tidur, ' . $prop->bathroom . ' K. Mandi, ' . $prop->building_area . ' m²'
+        ];
+    })->toJson() : '[]' !!};
+
     function getSaved() {
-        return JSON.parse(localStorage.getItem(SAVE_KEY) || '[]');
+        let saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '[]');
+        if (dbProps.length > 0) {
+            let updated = [];
+            saved.forEach(s => {
+                let fresh = dbProps.find(p => p.id === s.id);
+                if (fresh) {
+                    updated.push(fresh);
+                }
+            });
+            if (JSON.stringify(saved) !== JSON.stringify(updated)) {
+                localStorage.setItem(SAVE_KEY, JSON.stringify(updated));
+                saved = updated;
+            }
+        }
+        return saved;
     }
 
     function removeSaved(id) {

@@ -31,7 +31,8 @@ Route::get('/panduan', function () {
 });
 
 Route::get('/saved', function () {
-    return view('saved');
+    $properties = \App\Models\Property::with('images')->get();
+    return view('saved', compact('properties'));
 });
 
 Route::get('/seller-profile', function () {
