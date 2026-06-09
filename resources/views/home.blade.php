@@ -3,17 +3,19 @@
 @section('content')
 
 @include('auth.login')
-
 @include('auth.register')
 
 {{-- HERO --}}
-<section class="px-10 py-16 flex items-center justify-between bg-gradient-to-br from-[#f0e6dd] to-white overflow-hidden fade-in-section">
-    <div class="max-w-xl">
-        <h1 class="text-5xl font-extrabold mb-6 leading-tight text-gray-900">
+{{-- Perubahan: Tambah pt-28 di HP biar ga ketutupan filter, flex-col pindah ke md:flex-row --}}
+<section class="px-5 md:px-10 pt-28 md:pt-10 pb-16 md:pb-32 flex flex-col md:flex-row items-center justify-between bg-gradient-to-br from-[#f0e6dd] to-white overflow-hidden fade-in-section">
+    
+    {{-- Perubahan: text-center di HP, text-left di laptop. Margin minus cuma jalan di laptop --}}
+    <div class="max-w-xl text-center md:text-left mt-0 md:-mt-16 mb-10 md:mb-0">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight text-gray-900">
             Temukan Rumah <br> <span class="text-amber-700">Impianmu</span>
         </h1>
         
-        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+        <p class="text-base md:text-lg text-gray-600 mb-8 leading-relaxed">
             Jelajahi pilihan properti eksklusif kami yang dirancang untuk melengkapi gaya hidup dan impianmu.
         </p>
         
@@ -22,41 +24,46 @@
         </button>
     </div>
     
-    <div class="relative group">
+    {{-- Perubahan: Gambar nyesuaiin lebar HP, ga hardcode 500px mati lagi --}}
+    <div class="relative group mt-0 md:-mt-16 w-full max-w-[400px] md:max-w-none md:w-auto flex justify-center">
         <div class="absolute inset-0 bg-amber-600 rounded-3xl blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700"></div>
-        <img src="{{asset('assets/images/imagehome.png')}}" class="w-[600px] block relative z-10 group-hover:scale-105 transition-transform duration-700 drop-shadow-2xl">
+        <img src="{{asset('assets/images/imagehome.png')}}" class="w-full max-w-[320px] sm:max-w-[400px] md:w-[500px] md:max-w-none block relative z-10 group-hover:scale-105 transition-transform duration-700 drop-shadow-2xl">
     </div>
 </section>
 
 
 {{-- WHY CHOOSE US --}}
-<section class="text-center py-20 bg-white fade-in-section">
-    <h2 class="text-3xl font-extrabold mb-3 text-gray-900">Mengapa Memilih Kami</h2>
-    <p class="text-gray-500 mb-12 text-lg">Layanan terbaik untuk rumah masa depanmu</p>
+{{-- Perubahan: mt-0 di HP biar ga nabrak, grid-cols-1 naik bertahap ke sm:2 dan md:4 --}}
+<section class="text-center py-12 md:py-10 mt-0 md:-mt-10 relative z-10 bg-transparent fade-in-section">
+    <h2 class="text-2xl md:text-3xl font-extrabold mb-3 text-gray-900">Mengapa Memilih Kami</h2>
+    <p class="text-gray-500 mb-8 md:mb-12 text-base md:text-lg">Layanan terbaik untuk rumah masa depanmu</p>
     
-    <div class="grid grid-cols-4 gap-8 px-10">
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-default">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-5 md:px-10">
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-default">
             <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
             </div>
             <h3 class="font-bold text-lg mb-2 text-gray-900 group-hover:text-amber-600 transition-colors">Panduan Ahli</h3>
             <p class="text-sm text-gray-500">Agen profesional siap membantumu.</p>
         </div>
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-default">
+        
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-default">
             <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
             </div>
             <h3 class="font-bold text-lg mb-2 text-gray-900 group-hover:text-amber-600 transition-colors">Dipersonalisasi</h3>
             <p class="text-sm text-gray-500">Disesuaikan dengan kebutuhanmu.</p>
         </div>
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-default">
+        
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-default">
             <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" /></svg>
             </div>
             <h3 class="font-bold text-lg mb-2 text-gray-900 group-hover:text-amber-600 transition-colors">Transparan</h3>
             <p class="text-sm text-gray-500">Tanpa ada biaya tersembunyi.</p>
         </div>
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-default">
+        
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-default">
             <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" /></svg>
             </div>
@@ -68,7 +75,8 @@
 
 
 {{-- PROPERTY LIST --}}
-<section class="relative py-20 px-10 fade-in-section overflow-hidden">
+{{-- Perubahan: px-5 di HP biar ga kesempitan, grid-cols-1 ke sm:2 dan lg:3 --}}
+<section class="relative py-16 md:py-20 px-5 md:px-10 fade-in-section overflow-hidden">
     {{-- Background Image --}}
     <div class="absolute inset-0 z-0">
         <img src="{{ asset('assets/images/bg-residences.png') }}" alt="" class="w-full h-full object-cover">
@@ -78,11 +86,11 @@
 
     {{-- Content --}}
     <div class="relative z-10">
-        <h2 class="text-3xl font-extrabold mb-12 text-center text-white drop-shadow-lg">
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-8 md:mb-12 text-center text-white drop-shadow-lg">
             Residensi Populer Kami
         </h2>
         
-        <div class="grid grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             
             @php
             $popularProps = [

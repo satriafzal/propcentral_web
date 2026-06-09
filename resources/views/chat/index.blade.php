@@ -2,45 +2,30 @@
 
 @section('content')
 <style>
+    /* CSS disederhanain karena udh di-handle sama Tailwind */
     .chat-layout {
         display: flex;
-        height: calc(100vh - 80px); /* Adjust based on navbar height */
+        height: calc(100vh - 80px);
         background-color: #f8f9fa;
+        overflow: hidden;
     }
-    
-    
-    /* List column */
     .chat-list-col {
-        width: 380px;
         background-color: #ffffff;
         border-right: 1px solid #eaeaea;
-        display: flex;
-        flex-direction: column;
     }
-    
-    /* Main area */
     .chat-main {
-        flex: 1;
         background-color: #f8f9fa;
-        display: flex;
-        flex-direction: column;
         position: relative;
     }
-
-    /* Scrollbars */
-    .scrollable::-webkit-scrollbar {
-        width: 6px;
-    }
-    .scrollable::-webkit-scrollbar-thumb {
-        background-color: #e5e7eb;
-        border-radius: 10px;
-    }
+    .scrollable::-webkit-scrollbar { width: 6px; }
+    .scrollable::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 10px; }
 </style>
 
 <div class="chat-layout">
 
     {{-- Middle: Message List --}}
-    <section class="chat-list-col">
+    {{-- PERUBAHAN: Lebar full di HP, 380px di laptop --}}
+    <section class="chat-list-col w-full md:w-[380px] flex flex-col shrink-0">
         <div class="p-5 border-b border-gray-100">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -110,8 +95,8 @@
     </section>
 
     {{-- Right: Empty State --}}
-    <main class="chat-main flex items-center justify-center relative">
-        <!-- Subtle grid background pattern like in the image -->
+    {{-- PERUBAHAN: Sembunyiin di HP, baru muncul pas di layar laptop (md:flex) --}}
+    <main class="chat-main hidden md:flex flex-1 items-center justify-center flex-col">
         <div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(to right, #f0f0f0 1px, transparent 1px), linear-gradient(to bottom, #f0f0f0 1px, transparent 1px); background-size: 40px 40px;"></div>
         
         <div class="text-center max-w-sm relative z-10">
