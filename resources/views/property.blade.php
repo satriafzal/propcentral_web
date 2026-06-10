@@ -149,7 +149,7 @@
                  class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300">
 
                 {{-- Image --}}
-                <div class="w-full md:w-[40%] relative overflow-hidden h-64 md:h-auto">
+                <div class="w-full md:w-[40%] relative overflow-hidden h-64 md:h-auto shrink-0">
                     @if($prop->images->count() > 0)
                         <img src="{{ asset('storage/' . $prop->images->first()->image_path) }}"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
@@ -180,7 +180,7 @@
                 </div>
 
                 {{-- Details --}}
-                <div class="w-full md:w-[60%] p-8 flex flex-col justify-center">
+                <div class="w-full md:w-[60%] p-6 md:p-8 flex flex-col justify-center">
                     <h2 class="text-2xl font-bold text-gray-900 mb-1 group-hover:text-amber-700 transition-colors">
                         Rp {{ number_format($prop->price, 0, ',', '.') }}
                     </h2>
@@ -188,16 +188,29 @@
 
                     <div class="flex items-center gap-1.5 text-gray-500 text-sm mb-6">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                             stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                             stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                         </svg>
-                        {{ $prop->address }}
+                        <span class="truncate">{{ $prop->address }}</span>
                     </div>
 
-                    <hr class="border-gray-100 mb-4">
+                    <hr class="border-gray-100 mb-5">
 
-                    <div class="text-gray-600 text-sm font-medium">{{ $prop->bedroom }} K. Tidur, {{ $prop->bathroom }} K. Mandi, {{ $prop->building_area }} m²</div>
+                    {{-- PERUBAHAN: Dibungkus div flex biar sejajar sama tombol --}}
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-auto">
+                        <div class="text-gray-600 text-sm font-medium">
+                            {{ $prop->bedroom }} K. Tidur, {{ $prop->bathroom }} K. Mandi, {{ $prop->building_area }} m²
+                        </div>
+                        
+                        {{-- Tombol Lihat Detail --}}
+                        <a href="{{ route('property.show', $prop->id) }}" 
+                           class="inline-flex items-center justify-center bg-[#3d2b1f] hover:bg-[#2a1d14] text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 text-sm w-full sm:w-auto shrink-0 z-10"
+                           onclick="event.stopPropagation();">
+                            Lihat Detail
+                        </a>
+                    </div>
+
                 </div>
             </div>
             @empty
