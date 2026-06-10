@@ -194,16 +194,34 @@
             </p>
         </div>
 
+        @if (session('success'))
+            <div style="background-color: #dcfce7; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div style="background-color: #fee2e2; color: #b91c1c; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;">
+                {{ session('error') }}
+            </div>
+        @endif
+
         {{-- Form --}}
-        <form class="verify-form" action="{{ url('/reset-password') }}" method="GET">
+        <form class="verify-form" action="{{ route('password.verify') }}" method="POST" id="verifyForm">
             @csrf
+            <input type="hidden" name="email" value="{{ session('email') ?? old('email') }}">
+            <input type="hidden" name="token" id="tokenInput">
             
             {{-- 6-Digit Code Input --}}
             <div class="verify-inputs">
                 @for ($i = 1; $i <= 6; $i++)
-                    <input type="text" maxlength="1" class="verify-input">
+                    <input type="text" maxlength="1" class="verify-input" required>
                 @endfor
             </div>
+
+            @error('token')
+                <p style="color: #ef4444; font-size: 0.75rem; text-align: center;">{{ $message }}</p>
+            @enderror
 
             {{-- Submit Button --}}
             <button type="submit" class="verify-button">
@@ -214,7 +232,11 @@
         {{-- Resend Link --}}
         <div class="verify-resend">
             <span>Tidak menerima kode?</span>
-            <a href="#">Kirim ulang kode</a>
+            <form action="{{ route('password.email') }}" method="POST" class="inline-block m-0 p-0" id="resendForm">
+                @csrf
+                <input type="hidden" name="email" value="{{ session('email') ?? old('email') }}">
+                <button type="submit" id="resendBtn" class="bg-transparent border-none p-0 m-0 cursor-pointer font-bold text-[#3d2b1f] ml-1 hover:underline disabled:text-gray-400 disabled:cursor-not-allowed disabled:no-underline">Kirim ulang kode</button>
+            </form>
         </div>
 
         {{-- Divider --}}
@@ -249,6 +271,67 @@
                 }
             });
         });
+
+        // Combine inputs into hidden token field before submit
+        const form = document.getElementById('verifyForm');
+        if (form) {
+            form.addEventListener('submit', function() {
+                let token = '';
+                inputs.forEach(input => token += input.value);
+                document.getElementById('tokenInput').value = token;
+            });
+        }
+
+        // Timer Logic
+        const resendBtn = document.getElementById('resendBtn');
+        const resendForm = document.getElementById('resendForm');
+        
+        if (resendBtn && resendForm) {
+            const COOLDOWN_SECONDS = 300; // 5 minutes
+            const STORAGE_KEY = 'propcentral_resend_timer_forgot';
+            let timerInterval;
+
+            function updateTimerDisplay(remaining) {
+                if (remaining <= 0) {
+                    resendBtn.disabled = false;
+                    resendBtn.innerText = 'Kirim ulang kode';
+                    clearInterval(timerInterval);
+                    localStorage.removeItem(STORAGE_KEY);
+                    return;
+                }
+                resendBtn.disabled = true;
+                const minutes = Math.floor(remaining / 60);
+                const seconds = remaining % 60;
+                resendBtn.innerText = `Kirim ulang dalam ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            function startTimer() {
+                const now = Math.floor(Date.now() / 1000);
+                let expiry = localStorage.getItem(STORAGE_KEY);
+                
+                // Jika tidak ada expiry atau sudah lewat, mulai dari awal
+                if (!expiry || (expiry - now) <= 0) {
+                    expiry = now + COOLDOWN_SECONDS;
+                    localStorage.setItem(STORAGE_KEY, expiry);
+                }
+
+                clearInterval(timerInterval);
+                updateTimerDisplay(expiry - Math.floor(Date.now() / 1000));
+                
+                timerInterval = setInterval(() => {
+                    const remaining = expiry - Math.floor(Date.now() / 1000);
+                    updateTimerDisplay(remaining);
+                }, 1000);
+            }
+
+            // Mulai timer otomatis saat halaman dimuat
+            startTimer();
+
+            // Saat disubmit, reset timer untuk halaman berikutnya
+            resendForm.addEventListener('submit', function() {
+                localStorage.setItem(STORAGE_KEY, Math.floor(Date.now() / 1000) + COOLDOWN_SECONDS);
+            });
+        }
     });
 </script>
 @endsection

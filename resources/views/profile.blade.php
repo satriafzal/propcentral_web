@@ -175,13 +175,18 @@
                             <span class="font-semibold text-[#4b372d] text-sm md:text-base mt-2 md:mt-0">Password</span>
                             <div class="flex justify-between items-center w-full">
                                 <span class="text-sm md:text-base tracking-widest mt-1">********</span>
-                                <a href="{{ url('/verify-email') }}" class="border border-[#b79a85] text-[#7b5d4a] hover:bg-[#b79a85] hover:text-white transition px-4 py-1.5 md:py-2 rounded-lg font-medium inline-block text-center text-xs md:text-sm">
+                                <button type="submit" form="form-ubah-password" class="border border-[#b79a85] text-[#7b5d4a] hover:bg-[#b79a85] hover:text-white transition px-4 py-1.5 md:py-2 rounded-lg font-medium inline-block text-center text-xs md:text-sm">
                                     Ubah Password
-                                </a>
+                                </button>
                             </div>
                         </div>
 
                     </div>
+                </form>
+
+                <form id="form-ubah-password" action="{{ route('password.email') }}" method="POST" class="hidden">
+                    @csrf
+                    <input type="hidden" name="email" value="{{ Auth::user()->email }}">
                 </form>
             </div>
 

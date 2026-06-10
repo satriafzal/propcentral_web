@@ -172,15 +172,25 @@
                 Masukkan email yang terdaftar pada akun Anda. Kami akan mengirimkan kode verifikasi untuk mengatur ulang password Anda.
             </p>
 
-            <form action="{{ url('/verify-email') }}" method="GET">
+            @if (session('error'))
+                <div style="background-color: #fee2e2; color: #b91c1c; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <form action="{{ route('password.email') }}" method="POST">
+                @csrf
                 <div class="forgot-form-group">
                     <label class="forgot-label">Alamat Email</label>
                     <div class="forgot-input-wrapper">
-                        <input type="email" class="forgot-input" placeholder="contoh@email.com" required>
+                        <input type="email" name="email" value="{{ old('email') }}" class="forgot-input" placeholder="contoh@email.com" required>
                         <svg class="forgot-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                         </svg>
                     </div>
+                    @error('email')
+                        <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.5rem;">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <button type="submit" class="forgot-button">

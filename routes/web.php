@@ -7,7 +7,7 @@ use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Offercontroller;
-
+use App\Http\Controllers\PasswordResetController;
 Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/register', function () {
@@ -17,14 +17,13 @@ Route::get('/register', function () {
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 });
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
 
-Route::get('/verify-email', function () {
-    return view('auth.verify-email');
-});
+Route::get('/verify-email', [PasswordResetController::class, 'showVerifyForm'])->name('password.verify.form');
+Route::post('/verify-email', [PasswordResetController::class, 'verifyToken'])->name('password.verify');
 
-Route::get('/reset-password', function () {
-    return view('auth.reset-password');
-});
+Route::get('/reset-password', [PasswordResetController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 
 Route::get('/panduan', function () {
     return view('panduan');
@@ -43,6 +42,8 @@ Route::get('/property/{id}', [PropertyController::class, 'show'])->name('propert
 
 // routes for authentication
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
+Route::post('/register/verify', [AuthController::class, 'verifyRegisterPost'])->name('register.verify.post');
+Route::post('/register/resend', [AuthController::class, 'resendRegisterOtp'])->name('register.resend');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 
 // for ai assistant
