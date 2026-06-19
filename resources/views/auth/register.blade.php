@@ -82,9 +82,18 @@
         <h1 class="text-3xl font-bold text-center mb-4 text-gray-800">
             Verifikasi Email
         </h1>
-        <p class="text-center text-gray-600 mb-6 text-sm">
+        <p class="text-center text-gray-600 mb-2 text-sm">
             Masukkan 6 digit kode OTP yang telah kami kirimkan ke email Anda.
         </p>
+        {{-- Expiry countdown --}}
+        <div class="text-center mb-5">
+            <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
+                </svg>
+                Kode kadaluarsa dalam: <span id="otpCountdown" class="font-bold">10:00</span>
+            </span>
+        </div>
 
         <form action="{{ route('register.verify.post') }}" method="POST" class="flex flex-col gap-4">
             @csrf
@@ -199,18 +208,53 @@
         const regResendForm = document.getElementById('regResendForm');
         let regTimerInterval;
 
+        const COOLDOWN_SECONDS   = 300; // 5 menit untuk tombol resend
+        const OTP_EXPIRES_SECONDS = 600; // 10 menit untuk OTP
+        const RESEND_KEY = 'propcentral_resend_timer_register';
+        const OTP_KEY    = 'propcentral_otp_expiry_register';
+
+        // ── Countdown kadaluarsa OTP (10 menit) ──
+        function startOtpExpiryCountdown() {
+            const countdownEl = document.getElementById('otpCountdown');
+            if (!countdownEl) return;
+
+            const now = Math.floor(Date.now() / 1000);
+            let otpExpiry = parseInt(localStorage.getItem(OTP_KEY));
+
+            if (!otpExpiry || (otpExpiry - now) <= 0) {
+                otpExpiry = now + OTP_EXPIRES_SECONDS;
+                localStorage.setItem(OTP_KEY, otpExpiry);
+            }
+
+            const otpInterval = setInterval(() => {
+                const remaining = Math.max(0, otpExpiry - Math.floor(Date.now() / 1000));
+                const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+                const s = (remaining % 60).toString().padStart(2, '0');
+                countdownEl.textContent = `${m}:${s}`;
+
+                const badge = countdownEl.closest('span');
+                if (remaining <= 120 && badge) {
+                    badge.className = 'inline-flex items-center gap-1.5 bg-red-50 border border-red-200 text-red-600 text-xs font-semibold px-3 py-1.5 rounded-full';
+                }
+
+                if (remaining <= 0) {
+                    clearInterval(otpInterval);
+                    countdownEl.textContent = 'KADALUARSA';
+                    localStorage.removeItem(OTP_KEY);
+                }
+            }, 1000);
+        }
+
+        // ── Timer resend kode (5 menit cooldown) ──
         function startRegResendTimer() {
             if (!regResendBtn || !regResendForm) return;
-
-            const COOLDOWN_SECONDS = 300; // 5 minutes
-            const STORAGE_KEY = 'propcentral_resend_timer_register';
 
             function updateTimerDisplay(remaining) {
                 if (remaining <= 0) {
                     regResendBtn.disabled = false;
                     regResendBtn.innerText = 'Kirim ulang kode';
                     clearInterval(regTimerInterval);
-                    localStorage.removeItem(STORAGE_KEY);
+                    localStorage.removeItem(RESEND_KEY);
                     return;
                 }
                 regResendBtn.disabled = true;
@@ -220,24 +264,37 @@
             }
 
             const now = Math.floor(Date.now() / 1000);
-            let expiry = localStorage.getItem(STORAGE_KEY);
-            
+            let expiry = parseInt(localStorage.getItem(RESEND_KEY));
+
             if (!expiry || (expiry - now) <= 0) {
                 expiry = now + COOLDOWN_SECONDS;
-                localStorage.setItem(STORAGE_KEY, expiry);
+                localStorage.setItem(RESEND_KEY, expiry);
             }
 
             clearInterval(regTimerInterval);
             updateTimerDisplay(expiry - Math.floor(Date.now() / 1000));
-            
+
             regTimerInterval = setInterval(() => {
                 const remaining = expiry - Math.floor(Date.now() / 1000);
                 updateTimerDisplay(remaining);
             }, 1000);
 
             regResendForm.addEventListener('submit', function() {
-                localStorage.setItem(STORAGE_KEY, Math.floor(Date.now() / 1000) + COOLDOWN_SECONDS);
+                localStorage.setItem(RESEND_KEY, Math.floor(Date.now() / 1000) + COOLDOWN_SECONDS);
+                localStorage.setItem(OTP_KEY, Math.floor(Date.now() / 1000) + OTP_EXPIRES_SECONDS);
             });
         }
+
+        @if(session('show_register_verify_modal'))
+            openRegisterVerify();
+            startOtpExpiryCountdown();
+            startRegResendTimer();
+        @elseif ($errors->has('token'))
+            openRegisterVerify();
+            startOtpExpiryCountdown();
+            startRegResendTimer();
+        @elseif ($errors->has('username') || $errors->has('email') || $errors->has('password'))
+            openRegister();
+        @endif
     });
 </script>

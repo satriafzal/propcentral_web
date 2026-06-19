@@ -125,7 +125,7 @@
         {{-- List Header --}}
         <div class="flex justify-between items-center mb-8">
             <div class="text-sm text-gray-500">
-                Menampilkan <span class="font-bold text-gray-900">{{ $properties->count() }} Properti</span>
+                Menampilkan <span class="font-bold text-gray-900">{{ $properties->total() }} Properti</span>
             </div>
             <form action="{{ url('/property') }}" method="GET" class="flex items-center gap-2 text-sm">
                 @if(request('city')) <input type="hidden" name="city" value="{{ request('city') }}"> @endif
@@ -222,19 +222,44 @@
         </div>
 
         {{-- Pagination --}}
-        <div class="flex justify-center items-center gap-2 mt-8">
-            <button onclick="requireLogin(event)" class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-400 hover:bg-gray-50 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
-            </button>
-            <button class="w-9 h-9 flex items-center justify-center rounded-md bg-[#2a1d14] text-white text-sm font-medium">1</button>
-            <button onclick="requireLogin(event)" class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors">2</button>
-            <button onclick="requireLogin(event)" class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors">3</button>
-            <span class="text-gray-400 mx-1">...</span>
-            <button onclick="requireLogin(event)" class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors">12</button>
-            <button onclick="requireLogin(event)" class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-            </button>
+        @if ($properties->hasPages())
+        <div class="flex justify-center mt-8">
+            <nav class="flex items-center gap-1">
+
+                {{-- Prev --}}
+                @if ($properties->onFirstPage())
+                    <span class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-300 cursor-not-allowed">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                    </span>
+                @else
+                    <a href="{{ $properties->previousPageUrl() }}" class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                    </a>
+                @endif
+
+                {{-- Page Numbers --}}
+                @foreach ($properties->links()->elements[0] as $page => $url)
+                    @if ($page == $properties->currentPage())
+                        <span class="w-9 h-9 flex items-center justify-center rounded-md bg-[#2a1d14] text-white text-sm font-medium">{{ $page }}</span>
+                    @else
+                        <a href="{{ $url }}" class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors">{{ $page }}</a>
+                    @endif
+                @endforeach
+
+                {{-- Next --}}
+                @if ($properties->hasMorePages())
+                    <a href="{{ $properties->nextPageUrl() }}" class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    </a>
+                @else
+                    <span class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-300 cursor-not-allowed">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    </span>
+                @endif
+
+            </nav>
         </div>
+        @endif
 
     </div>
 </section>

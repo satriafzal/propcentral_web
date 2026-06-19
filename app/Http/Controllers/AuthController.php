@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Mail\VerifyRegistrationMail;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -17,8 +18,15 @@ class AuthController extends Controller
     public function registerPost(Request $request)
     {
         $request->validate([
-            'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email',
+            'username' => [
+                'required',
+                Rule::unique('users', 'username')->whereNull('deleted_at'),
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->whereNull('deleted_at'),
+            ],
             'password' => [
                 'required',
                 'min:6',
@@ -28,9 +36,9 @@ class AuthController extends Controller
             ]
         ], [
             'username.unique' => 'Username sudah terdaftar.',
-            'email.unique' => 'Email sudah terdaftar.',
+            'email.unique'    => 'Email sudah terdaftar.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
-            'password.regex' => 'Password harus mengandung setidaknya satu huruf besar dan satu karakter spesial.'
+            'password.regex'  => 'Password harus mengandung setidaknya satu huruf besar dan satu karakter spesial.'
         ]);
 
         // Generate 6 digit token
@@ -55,9 +63,10 @@ class AuthController extends Controller
         ]);
         session()->flash('show_register_verify_modal', true);
 
-        // Kirim email
+        // Kirim email (log driver saat development, smtp saat production)
         Mail::to($request->email)->send(new VerifyRegistrationMail($token));
 
+        session()->flash('show_register_verify_modal', true);
         return back()->with('success', 'Kode verifikasi telah dikirim ke email Anda.');
     }
 
@@ -81,6 +90,14 @@ class AuthController extends Controller
         if (!$record) {
             session()->flash('show_register_verify_modal', true);
             return back()->withErrors(['token' => 'Kode verifikasi tidak valid atau salah.'])->withInput();
+        }
+
+        // Cek apakah token sudah kadaluarsa (10 menit)
+        $createdAt = Carbon::parse($record->created_at);
+        if (Carbon::now()->diffInMinutes($createdAt) > 10) {
+            DB::table('password_reset_tokens')->where('email', $pendingUser['email'])->delete();
+            session()->flash('show_register_verify_modal', true);
+            return back()->withErrors(['token' => 'Kode OTP sudah kadaluarsa (10 menit). Silakan minta kode baru.'])->withInput();
         }
 
         // Token valid, hapus record token

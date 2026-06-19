@@ -7,74 +7,27 @@
 @section('content')
 
 {{-- Header Section --}}
-<section class="bg-[#faf9f8] py-16 px-10 text-center fade-in-section">
-    <div class="max-w-3xl mx-auto">
-        <span class="inline-block bg-[#e8d5c4] text-[#5a3e2b] text-xs font-bold px-3 py-1 rounded-full tracking-wider mb-6">
-            RESOURCE CENTER
-        </span>
-        <h1 class="text-4xl font-bold text-gray-900 mb-6 leading-tight">
-            Pusat Panduan & Artikel<br>PropCentral
+<section class="bg-[#ead9ce] pt-12 pb-8 px-10 border-b border-[#d8c5b6] text-center fade-in-section">
+    <div class="max-w-3xl mx-auto mt-4">
+        <h1 class="text-4xl font-bold text-[#2a1d14] mb-4">
+            Panduan & Artikel
         </h1>
-        <p class="text-gray-500 mb-10 text-sm">
-            Temukan wawasan mendalam mengenai pasar properti, strategi investasi, dan panduan langkah-demi-langkah untuk transaksi properti Anda.
+        <p class="text-[#5a3e2b] mb-8 text-sm">
+            Kumpulan panduan, tips, dan berita terkini seputar properti.
         </p>
         
-        <div class="flex flex-wrap justify-center gap-3">
-            <button class="bg-[#2a1d14] text-white px-5 py-2 rounded-full text-sm font-medium transition-transform hover:-translate-y-0.5">Semua Artikel</button>
-            <button class="bg-gray-200 text-gray-600 px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors">Tips Membeli</button>
-            <button class="bg-gray-200 text-gray-600 px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors">Tips Menjual</button>
-            <button class="bg-gray-200 text-gray-600 px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors">Seputar KPR</button>
-            <button class="bg-gray-200 text-gray-600 px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors">Berita Properti</button>
+        <div class="flex flex-wrap justify-center gap-2">
+            <button class="bg-[#2a1d14] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-black">Semua Artikel</button>
+            <button class="bg-white text-gray-700 px-4 py-2 rounded-lg text-sm border border-gray-200 font-medium hover:bg-gray-50 transition-colors">Tips Membeli</button>
+            <button class="bg-white text-gray-700 px-4 py-2 rounded-lg text-sm border border-gray-200 font-medium hover:bg-gray-50 transition-colors">Tips Menjual</button>
+            <button class="bg-white text-gray-700 px-4 py-2 rounded-lg text-sm border border-gray-200 font-medium hover:bg-gray-50 transition-colors">Seputar KPR</button>
         </div>
     </div>
 </section>
 
 {{-- Main Content --}}
-<section class="px-10 py-12 max-w-7xl mx-auto">
-    
-    {{-- Top Row: Featured & Newsletter --}}
-    <div class="flex flex-col lg:flex-row gap-8 mb-8 fade-in-section">
-        
-        {{-- Featured Article --}}
-        <div class="lg:w-2/3 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300">
-            <div class="h-80 overflow-hidden">
-                <img src="{{ asset('assets/images/article_featured.png') }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="p-8">
-                <div class="flex items-center gap-4 mb-4 text-xs font-medium">
-                    <span class="bg-[#f5ede6] text-[#8b6f5a] px-3 py-1 rounded-md">Seputar KPR</span>
-                    <span class="text-gray-400">12 OKT 2023</span>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-amber-700 transition-colors">Panduan Lengkap Memilih Suku Bunga KPR yang Tepat di Tahun 2024</h2>
-                <p class="text-gray-500 mb-6 text-sm leading-relaxed">
-                    Menjelajahi dinamika pasar keuangan global dan pengaruhnya terhadap suku bunga properti lokal untuk membantu Anda mengamankan penawaran terbaik.
-                </p>
-                <div class="flex items-center text-sm font-semibold text-gray-900 group-hover:text-amber-700 transition-colors">
-                    Baca Selengkapnya 
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 ml-1">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        
-        {{-- Newsletter --}}
-        <div class="lg:w-1/3 bg-[#3d2b1f] rounded-2xl p-8 text-white flex flex-col justify-center relative overflow-hidden">
-            <div class="relative z-10">
-                <h3 class="text-xl font-bold mb-3">Dapatkan Berita Terupdate</h3>
-                <p class="text-gray-300 text-sm mb-8 leading-relaxed">
-                    Daftarkan email Anda untuk menerima kurasi artikel dan tren properti mingguan langsung ke kotak masuk Anda.
-                </p>
-                <form class="flex flex-col gap-4">
-                    <input type="email" placeholder="Email Anda" class="bg-white/10 border border-white/20 text-white placeholder-gray-400 px-4 py-3 rounded-lg text-sm focus:outline-none focus:border-white/50 transition-colors">
-                    <button type="button" class="bg-[#e8d5c4] text-[#3d2b1f] font-bold py-3 rounded-lg hover:bg-white transition-colors text-sm">
-                        Berlangganan
-                    </button>
-                </form>
-            </div>
-        </div>
-        
-    </div>
+<section class="bg-[#faf9f8] px-10 py-12">
+    <div class="max-w-6xl mx-auto">
     
     {{-- Articles Grid --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -120,21 +73,7 @@
 
     </div>
 
-    {{-- Pagination --}}
-    <div class="flex justify-center items-center gap-2 fade-in-section">
-        <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:bg-gray-50 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
-        </button>
-        <button class="w-8 h-8 flex items-center justify-center rounded-full bg-[#2a1d14] text-white text-sm font-medium">1</button>
-        <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors">2</button>
-        <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors">3</button>
-        <span class="text-gray-400 mx-1">...</span>
-        <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors">12</button>
-        <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-        </button>
     </div>
-
 </section>
 
 {{-- CTA Section --}}

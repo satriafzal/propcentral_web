@@ -52,8 +52,8 @@ class PropertyController extends Controller
             $query->latest();
         }
 
-        // get data after filtering and sorting update
-        $properties = $query->get();
+        // get data after filtering and sorting update — 6 per page
+        $properties = $query->paginate(6)->appends($request->query());
 
         // get distinct cities from properties for filter options in the view
         $cities = \App\Models\Property::select('city')->distinct()->whereNotNull('city')->pluck('city');
