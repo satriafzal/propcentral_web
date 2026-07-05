@@ -136,4 +136,40 @@
     });
 </script>
 
+{{-- Laravel Echo & Pusher (for Reverb) --}}
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof isLoggedIn !== 'undefined' && isLoggedIn) {
+            window.Echo = new Echo({
+                broadcaster: 'reverb',
+                key: '{{ env("REVERB_APP_KEY") }}',
+                wsHost: window.location.hostname,
+                wsPort: {{ env('REVERB_PORT', 8080) }},
+                wssPort: {{ env('REVERB_PORT', 8080) }},
+                forceTLS: (window.location.protocol === 'https:'),
+                enabledTransports: ['ws', 'wss'],
+            });
+
+            // Listen for Offer updates
+            window.Echo.private('user.' + userId)
+                .listen('.offer.updated', (e) => {
+                    // Update badge penawaran masuk (if exists)
+                    // Cari element badge notifikasi penawaran, di navbar belum dikasih id, mari kita asumsikan namanya offerBadge
+                    // Atau kita bisa temukan by DOM
+                    console.log('Offer updated:', e);
+                });
+
+            // Listen for Chat Messages
+            window.Echo.private('chat.' + userId)
+                .listen('.message.sent', (e) => {
+                    console.log('New message:', e);
+                    // Update global chat badge
+                });
+        }
+    });
+</script>
+
 </html>

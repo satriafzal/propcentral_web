@@ -75,6 +75,8 @@ class ChatController extends Controller
 
         $conversation->update(['last_message_at' => now()]);
 
+        broadcast(new \App\Events\MessageSent($message, $userId));
+
         return response()->json([
             'success' => true,
             'message' => $message->load('sender'),

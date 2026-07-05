@@ -28,6 +28,9 @@
             <li><a href="{{ url('/jual') }}" class="font-medium text-gray-600 hover:text-amber-600 hover:-translate-y-0.5 inline-block transition-all duration-300">Jual Properti</a></li>
             <li><a href="{{ url('/panduan') }}" class="font-medium text-gray-600 hover:text-amber-600 hover:-translate-y-0.5 inline-block transition-all duration-300">Panduan</a></li>
             <li><a href="#" onclick="openContact()" class="font-medium text-gray-600 hover:text-amber-600 hover:-translate-y-0.5 inline-block transition-all duration-300">Kontak</a></li>
+            @if(auth()->check() && auth()->user()->role === 'admin')
+            <li><a href="{{ route('admin.dashboard') }}" class="font-bold text-amber-600 hover:text-amber-700 hover:-translate-y-0.5 inline-block transition-all duration-300">Admin Panel</a></li>
+            @endif
         </ul>
 
         {{-- Auth & Icons (TETAP MENTOK DI KANAN SAAT DESKTOP) --}}

@@ -37,7 +37,7 @@ class Offercontroller extends Controller
             return back()->with('error', 'Kamu sudah punya penawaran aktif untuk properti ini.');
         }
 
-        Offer::create([
+        $offer = Offer::create([
             'property_id'    => $property->id,
             'buyer_id'       => Auth::id(),
             'seller_id'      => $property->user_id,
@@ -48,6 +48,8 @@ class Offercontroller extends Controller
             'is_read_by_seller' => false,
             'is_read_by_buyer'  => true,
         ]);
+
+        broadcast(new \App\Events\OfferUpdated($offer, $property->user_id));
 
         return back()->with('success', 'Penawaran berhasil dikirim! Tunggu respons dari penjual.');
     }
@@ -124,6 +126,8 @@ class Offercontroller extends Controller
                 'counter' => 'Counter penawaran berhasil dikirim.',
             ];
 
+            broadcast(new \App\Events\OfferUpdated($offer, $offer->buyer_id));
+
             return back()->with('success', $messages[$request->action]);
         }
 
@@ -137,7 +141,7 @@ class Offercontroller extends Controller
 
             // Pembeli ajukan harga baru → buat record BARU, biarkan yang lama tetap
             if ($request->action === 're_offer') {
-                Offer::create([
+                $newOffer = Offer::create([
                     'property_id'       => $offer->property_id,
                     'buyer_id'          => $offer->buyer_id,
                     'seller_id'         => $offer->seller_id,
@@ -148,6 +152,7 @@ class Offercontroller extends Controller
                     'is_read_by_seller' => false,
                     'is_read_by_buyer'  => true,
                 ]);
+                broadcast(new \App\Events\OfferUpdated($newOffer, $newOffer->seller_id));
                 return back()->with('success', 'Penawaran baru berhasil diajukan! 🎉');
             }
 
@@ -171,6 +176,8 @@ class Offercontroller extends Controller
                 'accept'  => 'Counter penawaran berhasil disetujui! 🎉',
                 'reject'  => 'Penawaran telah diselesaikan.',
             ];
+
+            broadcast(new \App\Events\OfferUpdated($offer, $offer->seller_id));
 
             return back()->with('success', $messages[$request->action]);
         }

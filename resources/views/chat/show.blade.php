@@ -490,7 +490,25 @@
         }
     }
 
-    setInterval(pollMessages, 3000);
+    // Removed polling: setInterval(pollMessages, 3000);
+
+    // Gunakan Laravel Echo untuk WebSockets
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof window.Echo !== 'undefined') {
+            window.Echo.private('chat.' + currentUserId)
+                .listen('.message.sent', (e) => {
+                    // Jika pesan dari user yang sedang diajak chat
+                    if (e.message.sender_id == otherUserId) {
+                        appendOtherMessage(e.message.body, e.message.id, e.message.created_at, e.message.image);
+                        
+                        // Tandai pesan dibaca di background
+                        fetch(`/chat/${otherUserId}/messages?last_id=0`, {
+                            headers: { 'Accept': 'application/json' }
+                        });
+                    }
+                });
+        }
+    });
 
 </script>
 @endsection

@@ -8,6 +8,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Offercontroller;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\AdminController;
 Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/register', function () {
@@ -98,4 +99,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/user/{id}/reviews', [ProfileController::class, 'storeReview'])->name('profile.reviews.store');
 
+});
+
+// ─── Admin Routes ─────────────────────────────────────────────────
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/',             [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/users',        [AdminController::class, 'users'])->name('users');
+    Route::delete('/users/{id}',[AdminController::class, 'destroyUser'])->name('users.destroy');
+    Route::get('/properties',   [AdminController::class, 'properties'])->name('properties');
+    Route::delete('/properties/{id}', [AdminController::class, 'destroyProperty'])->name('properties.destroy');
+    Route::get('/offers',       [AdminController::class, 'offers'])->name('offers');
 });
